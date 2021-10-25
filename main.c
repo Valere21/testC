@@ -95,11 +95,26 @@ int main(int argc, char** argv)
     {
         SDL_Event event;
 
-        SDL_Window * window = SDL_CreateWindow("SDL2 Displaying Image",SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, 640, 480, 0);
-        SDL_Surface * vaisseaux = SDL_LoadBMP("vaisseaux.bmp");
+        SDL_Window * window = SDL_CreateWindow("SDL Programme", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 800, 600, SDL_WINDOW_SHOWN);
+//        SDL_Surface * vaisseaux = SDL_LoadBMP("vaisseaux.bmp");
         //        vaisseaux->w = 150;
         //        vaisseaux->h = 150;
 
+
+        SDL_Surface* pSurfAlien = SDL_LoadBMP("alien.bmp");
+        if ( pSurfAlien )
+        {
+            SDL_Rect dest = { 400/2 - pSurfAlien->w/2,250/2 - pSurfAlien->h/2, 0, 0};
+            dest.h = 50;
+            dest.w = 50;
+
+            SDL_BlitSurface(pSurfAlien,NULL,SDL_GetWindowSurface(window),&dest); // Copie du sprite
+
+            SDL_UpdateWindowSurface(window); // Mise à jour de la fenêtre pour prendre en compte la copie du sprite
+            SDL_Delay(2000); /* Attendre trois secondes, que l'utilisateur voit la fenêtre */
+
+            SDL_FreeSurface(pSurfAlien); // Libération de la ressource occupée par le sprite
+        }
 
 
 

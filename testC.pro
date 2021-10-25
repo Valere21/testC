@@ -12,6 +12,7 @@ INCLUDEPATH += C:/SDL2-2.0.16/x86_64-w64-mingw32/include/SDL2
      CXXFLAGS = -std=c++11
 
 DISTFILES += \
+    alien.bmp \
     vaisseaux.bmp
 
 HEADERS += \
