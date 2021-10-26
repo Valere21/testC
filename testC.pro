@@ -5,6 +5,8 @@ CONFIG -= qt
 
 SOURCES += \
         main.c \
+    manageGame.c \
+    spaceship.c
 
 
 INCLUDEPATH += C:/SDL2-2.0.16/x86_64-w64-mingw32/include/SDL2
@@ -16,4 +18,5 @@ DISTFILES += \
     vaisseaux.bmp
 
 HEADERS += \
-    Spaceship.h
+    Spaceship.h \
+    manageGame.h

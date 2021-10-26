@@ -3,20 +3,9 @@
 #include <stdio.h>
 #include <Spaceship.h>
 
-typedef struct VAISSEAU Vaisseau;
-
-
 typedef struct MANAGEGAME ManageGame;
-
-
-Vaisseau vaisseau(){
-    Vaisseau vs = {5,5,100,1};
-    return vs;
-}
-
-
-
 typedef struct MAP Map;
+
 struct MAP{
     int sizeMapXY[2];
     int posVsXY[2];
@@ -140,50 +129,6 @@ int main(int argc, char** argv)
             SDL_FreeSurface(pSprite); // Libération de la ressource occupée par le sprite
         }
 
-
-
-//        SDL_Renderer * renderer = SDL_CreateRenderer(window, -1, 0);
-//        SDL_Texture * texture = SDL_CreateTextureFromSurface(renderer, vaisseaux);
-//        SDL_SetColorKey(vaisseaux, SDL_TRUE, SDL_MapRGB(vaisseaux->format, 50, 50, 0));
-
-//        SDL_FreeSurface(vaisseaux);
-//        SDL_Rect src = {0, 0, 0, 0};
-//        SDL_Rect dst = { 0, 0, 400, 300 };
-//        SDL_QueryTexture(texture, NULL, NULL, &src.w, &src.h);
-
-//        SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
-//        SDL_RenderClear(renderer);
-//        SDL_RenderCopy(renderer, texture, &src, &dst);
-//        SDL_RenderPresent(renderer);
-
-//        for (int i = 0; i < 7; i++){
-
-
-//            SDL_SetTextureColorMod(texture ,25, 157, 255);
-//            SDL_RenderClear(renderer);
-//            SDL_RenderCopy(renderer, texture, NULL, NULL); // Affiche ma texture sur touts l'écran
-//            SDL_RenderPresent(renderer);
-//            SDL_Delay(500); /* Attendre trois secondes, que l'utilisateur voie la fenêtre */
-
-
-
-
-//            SDL_SetTextureColorMod(texture ,150, 0, 255);
-//            SDL_RenderClear(renderer);
-//            SDL_RenderCopy(renderer, texture, NULL, NULL);
-//            SDL_RenderPresent(renderer);
-
-//            SDL_Delay(500); /* Attendre trois secondes, que l'utilisateur voie la fenêtre */
-//        }
-
-//        //SDL_SetRenderDrawColor(renderer, 255, 255, 0, 255); Background color
-
-//        SDL_WaitEvent(&event);
-//        SDL_RenderClear(renderer);
-//        SDL_DestroyTexture(texture);
-//        SDL_FreeSurface(vaisseaux);
-//        SDL_DestroyRenderer(renderer);
-//        SDL_DestroyWindow(window);
     }
 
     getInput();
@@ -191,32 +136,11 @@ int main(int argc, char** argv)
     Map carte = map();
     drawMap(carte);
 
-    Vaisseau va = vaisseau();
-    Vaisseau vb = vaisseau();
+//    Vaisseau va = vaisseau();
+//    Vaisseau vb = vaisseau();
 
     getInput();
     SDL_Quit();
 
     return 0;
 }
-
-
-////if(window)
-////{
-
-////    SDL_Delay(3000); /* Attendre trois secondes, que l'utilisateur voie la fenêtre */
-////    SDL_DestroyTexture(texture);
-////    SDL_FreeSurface(vaisseaux);
-////    SDL_DestroyRenderer(renderer);
-////    SDL_DestroyWindow(window);
-
-
-////    //SDL_DestroyWindow(pWindow);
-////}
-
-
-////else
-////{
-////    fprintf(stderr,"Erreur de création de la fenêtre: %s\n",SDL_GetError());
-////}
-

@@ -3,9 +3,17 @@
 
 #endif // SPACESHIP_H
 
+enum spaceshipType {
+    
+    Spaceship = 0,
+    Alien = 1
+};
+
 struct VAISSEAU{
     int posX;
     int posY;
     int life;
     char direction;
+    
+    
 };
