@@ -85,6 +85,8 @@ void loadbackground(ManageGame manager){
 
     //////////////////////////////
 
+
+
     //    SDL_SetWindowFullscreen(manager.s_galaxyBackground,SDL_WINDOW_FULLSCREEN);
     if (manager.s_galaxyBackground)
     {
