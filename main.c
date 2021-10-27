@@ -1,22 +1,13 @@
 #include "SDL.h"
-#include "conio.h"
 #include <stdio.h>
-#include <Spaceship.h>
-
-typedef struct VAISSEAU Vaisseau;
-
-
-typedef struct MANAGEGAME ManageGame;
-
-
-Vaisseau vaisseau(){
-    Vaisseau vs = {5,5,100,1};
-    return vs;
-}
-
-
+#include "conio.h"
+#include "Spaceship.h"
+#include "manageGame.h"
+//#include "manageGame.c"
 
 typedef struct MAP Map;
+typedef struct MANAGEGAME ManageGame;
+
 struct MAP{
     int sizeMapXY[2];
     int posVsXY[2];
@@ -61,6 +52,11 @@ void drawMap(Map map){
     }
 }
 
+int printVal(int i)
+{
+    printf("%d\n", i);
+    return i;
+}
 void getInput(){
 
     int frappe;
@@ -83,140 +79,27 @@ int main(int argc, char** argv)
 
     char **b = argv;
     *b = 0;
-    /* Initialisation simple */
-    SDL_Init(SDL_INIT_VIDEO);
-    if (SDL_Init(SDL_INIT_VIDEO) != 0 )
-    {
-        fprintf(stdout,"Échec de l'initialisation de la SDL (%s)\n",SDL_GetError());
-        return -1;
-    }
-    else
-    {
-        SDL_Event event;
-
-        SDL_Window * window = SDL_CreateWindow("SDL Programme", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 800, 600, SDL_WINDOW_SHOWN);
-//        SDL_Surface * vaisseaux = SDL_LoadBMP("vaisseaux.bmp");
-        //        vaisseaux->w = 150;
-        //        vaisseaux->h = 150;
 
 
-        SDL_Surface* pSurfAlien = SDL_LoadBMP("alien.bmp");
-        if ( pSurfAlien )
-        {
-            SDL_Rect dest = { 400/2 - pSurfAlien->w/2,250/2 - pSurfAlien->h/2, 0, 0};
-            dest.h = 50;
-            dest.w = 50;
+    ManageGame manager;                             //nouvelle structure ManageGame
 
-            SDL_BlitSurface(pSurfAlien,NULL,SDL_GetWindowSurface(window),&dest); // Copie du sprite
-
-            SDL_UpdateWindowSurface(window); // Mise à jour de la fenêtre pour prendre en compte la copie du sprite
-            SDL_Delay(2000); /* Attendre trois secondes, que l'utilisateur voit la fenêtre */
-
-            SDL_FreeSurface(pSurfAlien); // Libération de la ressource occupée par le sprite
-        }
+    manager.manageGame = &manageGame; //référencement du prototype de pointeur de fonction (depuis le .h), vers la déclaration de la fonction (vers le .c)
+    manager.loopGame = &loopGame;
 
 
+    manager = manager.manageGame(manager);                    //initialisation de la nouvelle structure
 
-        SDL_Surface* pSprite = SDL_LoadBMP("vaisseaux.bmp");
-        if ( pSprite )
-        {
-            SDL_Rect dest = { 640/2 - pSprite->w/2,480/2 - pSprite->h/2, 0, 0};
-            dest.h = 50;
-            dest.w = 50;
-
-            SDL_BlitSurface(pSprite,NULL,SDL_GetWindowSurface(window),&dest); // Copie du sprite
-
-            SDL_UpdateWindowSurface(window); // Mise à jour de la fenêtre pour prendre en compte la copie du sprite
-            SDL_Delay(2000); /* Attendre trois secondes, que l'utilisateur voit la fenêtre */
-
-            dest.x = 640/3 - pSprite->w/2;
-            dest.y = 480/3 - pSprite->h/2;
-
-            SDL_BlitSurface(pSprite,NULL,SDL_GetWindowSurface(window),&dest); // Copie du sprite
-            
-            SDL_UpdateWindowSurface(window); // Mise à jour de la fenêtre pour prendre en compte la copie du sprite
-
-
-            SDL_FreeSurface(pSprite); // Libération de la ressource occupée par le sprite
-        }
-
-
-
-//        SDL_Renderer * renderer = SDL_CreateRenderer(window, -1, 0);
-//        SDL_Texture * texture = SDL_CreateTextureFromSurface(renderer, vaisseaux);
-//        SDL_SetColorKey(vaisseaux, SDL_TRUE, SDL_MapRGB(vaisseaux->format, 50, 50, 0));
-
-//        SDL_FreeSurface(vaisseaux);
-//        SDL_Rect src = {0, 0, 0, 0};
-//        SDL_Rect dst = { 0, 0, 400, 300 };
-//        SDL_QueryTexture(texture, NULL, NULL, &src.w, &src.h);
-
-//        SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
-//        SDL_RenderClear(renderer);
-//        SDL_RenderCopy(renderer, texture, &src, &dst);
-//        SDL_RenderPresent(renderer);
-
-//        for (int i = 0; i < 7; i++){
-
-
-//            SDL_SetTextureColorMod(texture ,25, 157, 255);
-//            SDL_RenderClear(renderer);
-//            SDL_RenderCopy(renderer, texture, NULL, NULL); // Affiche ma texture sur touts l'écran
-//            SDL_RenderPresent(renderer);
-//            SDL_Delay(500); /* Attendre trois secondes, que l'utilisateur voie la fenêtre */
-
-
-
-
-//            SDL_SetTextureColorMod(texture ,150, 0, 255);
-//            SDL_RenderClear(renderer);
-//            SDL_RenderCopy(renderer, texture, NULL, NULL);
-//            SDL_RenderPresent(renderer);
-
-//            SDL_Delay(500); /* Attendre trois secondes, que l'utilisateur voie la fenêtre */
-//        }
-
-//        //SDL_SetRenderDrawColor(renderer, 255, 255, 0, 255); Background color
-
-//        SDL_WaitEvent(&event);
-//        SDL_RenderClear(renderer);
-//        SDL_DestroyTexture(texture);
-//        SDL_FreeSurface(vaisseaux);
-//        SDL_DestroyRenderer(renderer);
-//        SDL_DestroyWindow(window);
-    }
 
     getInput();
 
     Map carte = map();
     drawMap(carte);
 
-    Vaisseau va = vaisseau();
-    Vaisseau vb = vaisseau();
+    //    Vaisseau va = vaisseau();
+    //    Vaisseau vb = vaisseau();
 
     getInput();
     SDL_Quit();
 
     return 0;
 }
-
-
-////if(window)
-////{
-
-////    SDL_Delay(3000); /* Attendre trois secondes, que l'utilisateur voie la fenêtre */
-////    SDL_DestroyTexture(texture);
-////    SDL_FreeSurface(vaisseaux);
-////    SDL_DestroyRenderer(renderer);
-////    SDL_DestroyWindow(window);
-
-
-////    //SDL_DestroyWindow(pWindow);
-////}
-
-
-////else
-////{
-////    fprintf(stderr,"Erreur de création de la fenêtre: %s\n",SDL_GetError());
-////}
-
