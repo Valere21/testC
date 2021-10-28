@@ -60,10 +60,10 @@ void loadbackground(ManageGame manager){
     else printf("valeur flag false \n");
     printf("%p\n", &rectangleResult);
 
-
     SDL_SetRenderDrawColor(manager.s_renderer, 150, 255, 0, 100);
     SDL_RenderFillRect(manager.s_renderer, &rectangleResult);
     SDL_RenderPresent(manager.s_renderer); // On mets a jour notre fenêtre
+
 
     SDL_RendererInfo infoRenderer;
     SDL_GetRendererInfo(manager.s_renderer, &infoRenderer);
@@ -82,6 +82,8 @@ void loadbackground(ManageGame manager){
     {
         SDL_Log("Le rendu est autoriser sur des texture...");
     }
+
+    SDL_Texture* pTexture = SDL_CreateTexture(manager.s_renderer, SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_TARGET, 100, 100);
 
     //////////////////////////////
 
@@ -130,7 +132,7 @@ void loopGame(){                            //Boucle de jeu
         while (SDL_PollEvent(&events))      //Boucle d'événements
         {
             switch( events.type )
-            {
+            {                
             case SDL_QUIT:isOpen = false;   //Quit event
                 break;
             }
