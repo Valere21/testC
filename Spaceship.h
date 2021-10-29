@@ -3,13 +3,6 @@
 
 #include "SDL.h"
 
-
-enum spaceshipType {
-
-    Spaceship = 0,
-    Alien = 1
-};
-
 struct VAISSEAU{
 
     int posX;

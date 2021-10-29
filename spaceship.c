@@ -1,5 +1,5 @@
 #include <Spaceship.h>
-
+#include "manageGame.h"
 typedef struct VAISSEAU Vaisseau;
 
 

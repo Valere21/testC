@@ -6,11 +6,33 @@
 
 typedef struct MANAGEGAME ManageGame;
 
+enum pictureType {
+    Background,
+    Spaceship,
+    Alien
+};
+
+enum flagPicture {
+
+    fullBackground,
+    minimizeBackground,
+    setupAlienSpaceship,
+    spawnSpaceship,
+    respawnSpaceship,
+};
+
+enum toolSDL{
+    windowTool,
+    rendererTool,
+    surfaceTool,
+    textureTool
+};
+
 enum level {
-    niveau1 = 0,
-    niveau2 = 1,
-    niveau3 = 2,
-    niveauInfini = 3
+    niveau1,
+    niveau2,
+    niveau3,
+    niveauInfini
 };
 
 enum bool {
@@ -18,15 +40,22 @@ enum bool {
     true = 1
 };
 
+
+
 ManageGame manageGame(ManageGame);
-void loopGame();
+ManageGame loopGame(ManageGame manager);
+
+enum bool LoadImage(int type);
 
 struct MANAGEGAME{
 
     int level;
     SDL_Window *s_window;
-    SDL_Surface *s_galaxyBackground;
+    SDL_Surface *s_surface;
     SDL_Renderer *s_renderer;
+    SDL_Texture *s_texture;
+    SDL_Texture *s_textShip;
+    SDL_Texture *s_textAlien;
 
 
 
