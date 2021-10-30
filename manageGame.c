@@ -17,88 +17,145 @@ void cleanRessources(SDL_Window *w, SDL_Renderer *r, SDL_Texture *t){
 }
 
 void checkSDLTools(ManageGame manager, int tool){
-    if (tool == windowTool){
-        if (manager.s_window== NULL){
+
+    switch (tool) {
+    case WINDOW_TOOL_SDL:{
+        if (manager.s_window == NULL){
             SDL_Log("ERREUR > %s\n", SDL_GetError());
             cleanRessources(manager.s_window, NULL, NULL);
         }
+        break;
     }
-    if (tool == surfaceTool){
+
+        //    case RENDERER_TOOL_SDL:{
+        //        if (SDL_RenderCopy(manager.s_renderer, manager.s_texture, NULL, NULL) != 0){
+        //            SDL_Log("ERREUR > %s \n", SDL_GetError());
+        //            cleanRessources(manager.s_window, manager.s_renderer, manager.s_texture);
+        //        }
+        //        break;
+        //    }
+    case SURFACE_TOOL_SDL:{
         if (manager.s_surface == NULL){
             SDL_Log("ERREUR > %s\n", SDL_GetError());
             cleanRessources(manager.s_window, manager.s_renderer, NULL);
         }
+        break;
     }
-    if (tool == textureTool){
+    case TEXTURE_TOOL_SDL:{
         if (manager.s_texture == NULL){
             SDL_Log("ERREUR > %s\n", SDL_GetError());
             cleanRessources(manager.s_window, manager.s_renderer, NULL);
         }
+        break;
+    }
     }
 }
 
-void loadSpaceship(ManageGame manager, int pictureFlag){
+void loadSpaceship(ManageGame *manager, int pictureFlag){
 
-}
+        fprintf(stdout,"Level %d \n", manager->level);
 
-void loadAlien(ManageGame manager, int pictureFlag){
+    if (manager->s_window == NULL) SDL_Log("NULL");
 
+    SDL_Log("Window %p", manager->s_window);
 
-}
+//    manager.s_window = SDL_CreateWindow("Appli test", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, 640, 480, SDL_WINDOW_SHOWN);
 
-void loadbackground(ManageGame manager, int flag){
+    checkSDLTools(*manager, WINDOW_TOOL_SDL);
 
-    if (flag == fullBackground)
-        manager.s_window = SDL_CreateWindow("Appli test", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, 640, 480, SDL_WINDOW_FULLSCREEN_DESKTOP);
-
-    else if (flag == minimizeBackground)
-        manager.s_window = SDL_CreateWindow("Appli test", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, 640, 480, SDL_WINDOW_SHOWN);
-
-    checkSDLTools(manager, windowTool);
-
-
-    manager.s_renderer = SDL_CreateRenderer(manager.s_window, -1, SDL_RENDERER_TARGETTEXTURE);
+    manager->s_renderer = SDL_CreateRenderer(manager->s_window, -1, SDL_RENDERER_TARGETTEXTURE);
 
 
     SDL_Rect dest = { 0, 0, 640, 480};
 
-    manager.s_surface = SDL_LoadBMP("bg.bmp");
-    //    manager.s_textAlien = SDL_LoadBMP("alien.bmp");
-    //    manager.s_textAlien = SDL_LoadBMP("alien.bmp");
+    manager->s_surface = SDL_LoadBMP("spaceship.bmp");
+    checkSDLTools(*manager, SURFACE_TOOL_SDL);
+
+    manager->s_texture = SDL_CreateTextureFromSurface(manager->s_renderer, manager->s_surface);
+    SDL_FreeSurface(manager->s_surface);
+
+    checkSDLTools(*manager, TEXTURE_TOOL_SDL);
 
 
-    checkSDLTools(manager, surfaceTool);
+    if (SDL_QueryTexture(manager->s_texture, NULL, NULL, &dest.w, &dest.h) != 0){
+        SDL_Log("ERREUR > %s \n", SDL_GetError());
+        cleanRessources(manager->s_window, manager->s_renderer, manager->s_texture);
+    }
+
+    //    checkSDLTools(manager, RENDERER_TOOL_SDL);
+
+    if (SDL_RenderCopy(manager->s_renderer, manager->s_texture, NULL, NULL) != 0){
+        SDL_Log("ERREUR > %s \n", SDL_GetError());
+        cleanRessources(manager->s_window, manager->s_renderer, manager->s_texture);
+    }
 
 
-    manager.s_texture = SDL_CreateTextureFromSurface(manager.s_renderer, manager.s_surface);
+    SDL_RenderPresent(manager->s_renderer);
+
+    SDL_Delay(3000);
+}
+
+void loadAlien(ManageGame manager, int pictureFlag){
+
     SDL_FreeSurface(manager.s_surface);
+    manager.s_surface = SDL_LoadBMP("alien.bmp");
+    SDL_Log("OK");
+}
 
-    checkSDLTools(manager, textureTool);
+void loadBackground(ManageGame *manager, int flag){
 
 
-    if (SDL_QueryTexture(manager.s_texture, NULL, NULL, &dest.w, &dest.h) != 0){
+    manager->level = 8;
+    fprintf(stdout,"Level %d \n", manager->level);
+
+    if (flag == FULL_BACKGROUND)
+        manager->s_window = SDL_CreateWindow("Appli test", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, 640, 480, SDL_WINDOW_FULLSCREEN_DESKTOP);
+
+    else if (flag == MINIMIZE_BACKGROUND)
+        manager->s_window = SDL_CreateWindow("Appli test", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, 640, 480, SDL_WINDOW_SHOWN);
+
+
+    checkSDLTools(*manager, WINDOW_TOOL_SDL);
+
+
+
+    manager->s_renderer = SDL_CreateRenderer(manager->s_window, -1, SDL_RENDERER_TARGETTEXTURE);
+
+
+
+
+    SDL_Rect dest = { 0, 0, 640, 480};
+
+    manager->s_surface = SDL_LoadBMP("bg.bmp");
+    checkSDLTools(*manager, SURFACE_TOOL_SDL);
+
+
+    manager->s_texture = SDL_CreateTextureFromSurface(manager->s_renderer, manager->s_surface);
+    SDL_FreeSurface(manager->s_surface);
+
+    checkSDLTools(*manager, TEXTURE_TOOL_SDL);
+
+
+    if (SDL_QueryTexture(manager->s_texture, NULL, NULL, &dest.w, &dest.h) != 0){
         SDL_Log("ERREUR > %s \n", SDL_GetError());
-        cleanRessources(manager.s_window, manager.s_renderer, manager.s_texture);
+        cleanRessources(manager->s_window, manager->s_renderer, manager->s_texture);
     }
 
-    if (SDL_RenderCopy(manager.s_renderer, manager.s_texture, NULL, NULL) != 0){
+    //    checkSDLTools(manager, RENDERER_TOOL_SDL);
+
+    if (SDL_RenderCopy(manager->s_renderer, manager->s_texture, NULL, NULL) != 0){
         SDL_Log("ERREUR > %s \n", SDL_GetError());
-        cleanRessources(manager.s_window, manager.s_renderer, manager.s_texture);
+        cleanRessources(manager->s_window, manager->s_renderer, manager->s_texture);
     }
 
 
-    SDL_RenderPresent(manager.s_renderer);
-    SDL_Delay(5000);
+    SDL_RenderPresent(manager->s_renderer);
 
-    cleanRessources(manager.s_window, manager.s_renderer, manager.s_texture);
-
-    //////////////////////////////
-
-
-
+    SDL_Delay(1000);
+//    cleanRessources(manager.s_window, manager.s_renderer, manager.s_texture);
 
     SDL_RendererInfo infoRenderer;
-    SDL_GetRendererInfo(manager.s_renderer, &infoRenderer);
+    SDL_GetRendererInfo(manager->s_renderer, &infoRenderer);
 
     if (infoRenderer.flags & SDL_RENDERER_ACCELERATED)
     {
@@ -115,14 +172,16 @@ void loadbackground(ManageGame manager, int flag){
         SDL_Log("Le rendu est autoriser sur des texture...");
     }
 
+    fprintf(stdout,"Window bG %p \n", manager->s_window);
+
 }
 void loadPicture(ManageGame manager, int type, int flag){
 
 
     if (type == Background)
-        loadbackground(manager, flag);
+        loadBackground(&manager, flag);
     if (type == Spaceship)
-        loadSpaceship(manager, flag);
+        loadSpaceship(&manager, flag);
     if (type == Alien)
         loadAlien(manager, flag);
 }
@@ -138,7 +197,7 @@ ManageGame initSDL(ManageGame manager){
 
     manager.s_texture = NULL;
     manager.s_textShip = NULL;
-    manager.s_textAlien = NULL;;
+    manager.s_textAlien = NULL;
 
 
     SDL_Init(SDL_INIT_VIDEO);
@@ -162,7 +221,7 @@ ManageGame loopGame(ManageGame manager){                            //Boucle de 
         while (SDL_PollEvent(&events))      //Boucle d'événements
         {
             switch( events.type )
-            {                
+            {
             case SDL_QUIT:isOpen = false;   //Quit event
                 break;
             }
@@ -176,14 +235,22 @@ ManageGame loopGame(ManageGame manager){                            //Boucle de 
 
 ManageGame manageGame(ManageGame manager){            //déclaration de fonction manageGame (qui sert de constructeur pour la struct ManageGame, aka rassembler les fonctions d'initialisations ex: initSDL.
     //Fonction quoi DOIT être appellé juste après chaque nouvelle instanciation, on est pas en C++.
-    printf("hello world \n");
+
+
+
+
     manager = initSDL(manager);
-    loadPicture(manager, Background, minimizeBackground);
-    loadPicture(manager, Spaceship, spawnSpaceship);
-    loadPicture(manager, Alien, setupAlienSpaceship);
+
+    printf("hello world \n");
+//    loadPicture(manager, Background, MINIMIZE_BACKGROUND);
+    fprintf(stdout,"Window %p \n", manager);
+    fprintf(stdout,"Window bG %p \n", manager.s_window);
+//    loadPicture(manager, Spaceship, spawnSpaceship);
+    loadBackground(&manager,MINIMIZE_BACKGROUND);
+    loadSpaceship(&manager,spawnSpaceship);
+//    loadPicture(manager, Alien, setupAlienSpaceship);
+
     return manager;
-
-
 }
 
 

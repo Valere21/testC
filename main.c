@@ -85,7 +85,10 @@ int main(int argc, char** argv)
 
     manager.manageGame = &manageGame; //référencement du prototype de pointeur de fonction (depuis le .h), vers la déclaration de la fonction (vers le .c)
     manager.loopGame = &loopGame;
-
+    manager.loadPicture = &loadPicture;
+    manager.loadAlien = &loadAlien;
+    manager.loadSpaceship = &loadSpaceship;
+    manager.loadBackground = &loadBackground;
 
     manager = manager.manageGame(manager);                    //initialisation de la nouvelle structure
 

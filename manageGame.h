@@ -14,18 +14,18 @@ enum pictureType {
 
 enum flagPicture {
 
-    fullBackground,
-    minimizeBackground,
+    FULL_BACKGROUND,
+    MINIMIZE_BACKGROUND,
     setupAlienSpaceship,
     spawnSpaceship,
     respawnSpaceship,
 };
 
 enum toolSDL{
-    windowTool,
-    rendererTool,
-    surfaceTool,
-    textureTool
+    WINDOW_TOOL_SDL,
+    RENDERER_TOOL_SDL,
+    SURFACE_TOOL_SDL,
+    TEXTURE_TOOL_SDL
 };
 
 enum level {
@@ -45,7 +45,11 @@ enum bool {
 ManageGame manageGame(ManageGame);
 ManageGame loopGame(ManageGame manager);
 
-enum bool LoadImage(int type);
+void loadPicture(ManageGame manager, int type, int flag);
+void loadAlien(ManageGame manager, int type);
+void loadSpaceship(ManageGame *manager, int type);
+void loadBackground(ManageGame *manager, int type);
+
 
 struct MANAGEGAME{
 
@@ -58,10 +62,30 @@ struct MANAGEGAME{
     SDL_Texture *s_textAlien;
 
 
-
     ManageGame (*manageGame)(ManageGame);       //référencement du prototype de pointeur de fonction (depuis le .h), vers la déclaration de la fonction (vers le .c)
     ManageGame (*loopGame)();
+
+    void (*loadPicture)(ManageGame, int, int);
+    void (*loadAlien)(ManageGame, int);
+    void (*loadSpaceship)(ManageGame, int);
+    void (*loadBackground)(ManageGame, int);
 };
 
 
 #endif // MANAGEGAME_H
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
