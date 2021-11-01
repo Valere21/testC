@@ -1,5 +1,5 @@
-#include "SDL.h"
 #include <stdio.h>
+#include "SDL.h"
 #include "conio.h"
 #include "Spaceship.h"
 #include "manageGame.h"

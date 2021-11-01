@@ -42,11 +42,11 @@ enum bool {
 
 
 
-ManageGame manageGame(ManageGame);
-ManageGame loopGame(ManageGame manager);
+ManageGame manageGame(ManageGame *manager);
+ManageGame loopGame(ManageGame *manager);
 
-void loadPicture(ManageGame manager, int type, int flag);
-void loadAlien(ManageGame manager, int type);
+void loadPicture(ManageGame *manager, int type, int flag);
+void loadAlien(ManageGame *manager, int type);
 void loadSpaceship(ManageGame *manager, int type);
 void loadBackground(ManageGame *manager, int type);
 
@@ -65,10 +65,10 @@ struct MANAGEGAME{
     ManageGame (*manageGame)(ManageGame);       //référencement du prototype de pointeur de fonction (depuis le .h), vers la déclaration de la fonction (vers le .c)
     ManageGame (*loopGame)();
 
-    void (*loadPicture)(ManageGame, int, int);
-    void (*loadAlien)(ManageGame, int);
-    void (*loadSpaceship)(ManageGame, int);
-    void (*loadBackground)(ManageGame, int);
+    void (*loadPicture)(ManageGame*, int, int);
+    void (*loadAlien)(ManageGame*, int);
+    void (*loadSpaceship)(ManageGame*, int);
+    void (*loadBackground)(ManageGame*, int);
 };
 
 
