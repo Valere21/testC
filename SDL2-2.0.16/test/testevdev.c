@@ -11,7 +11,7 @@
   freely.
 */
 
-#include "SDL_internal.h"
+#include "../src/SDL_internal.h"
 
 #include <stdio.h>
 #include <string.h>

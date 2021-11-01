@@ -53,18 +53,10 @@ void checkSDLTools(ManageGame manager, int tool){
 
 void loadSpaceship(ManageGame *manager, int pictureFlag){
 
-        fprintf(stdout,"Level %d \n", manager->level);
-
-    if (manager->s_window == NULL) SDL_Log("NULL");
+    if (manager->s_window == NULL) SDL_Log("NULL + %d", pictureFlag);
 
     SDL_Log("Window %p", manager->s_window);
-
-//    manager.s_window = SDL_CreateWindow("Appli test", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, 640, 480, SDL_WINDOW_SHOWN);
-
     checkSDLTools(*manager, WINDOW_TOOL_SDL);
-
-    manager->s_renderer = SDL_CreateRenderer(manager->s_window, -1, SDL_RENDERER_TARGETTEXTURE);
-
 
     SDL_Rect dest = { 0, 0, 640, 480};
 
@@ -82,8 +74,6 @@ void loadSpaceship(ManageGame *manager, int pictureFlag){
         cleanRessources(manager->s_window, manager->s_renderer, manager->s_texture);
     }
 
-    //    checkSDLTools(manager, RENDERER_TOOL_SDL);
-
     if (SDL_RenderCopy(manager->s_renderer, manager->s_texture, NULL, NULL) != 0){
         SDL_Log("ERREUR > %s \n", SDL_GetError());
         cleanRessources(manager->s_window, manager->s_renderer, manager->s_texture);
@@ -92,13 +82,26 @@ void loadSpaceship(ManageGame *manager, int pictureFlag){
 
     SDL_RenderPresent(manager->s_renderer);
 
-    SDL_Delay(3000);
+    SDL_Delay(2000);
+
+    fprintf(stdout,"great \n");
+    int *w = NULL;
+    int *h = NULL;
+    w = malloc(sizeof (int));
+    *w = 2000;
+    h = malloc(sizeof (int));
+    *h = 200;
+
+    SDL_QueryTexture(manager->s_texture, NULL, NULL, w, h);
+    SDL_RenderCopy(manager->s_renderer, manager->s_texture, &dest, NULL);
+    SDL_RenderPresent(manager->s_renderer);
+
 }
 
-void loadAlien(ManageGame manager, int pictureFlag){
+void loadAlien(ManageGame *manager, int pictureFlag){
 
-    SDL_FreeSurface(manager.s_surface);
-    manager.s_surface = SDL_LoadBMP("alien.bmp");
+    SDL_FreeSurface(manager->s_surface);
+    manager->s_surface = SDL_LoadBMP("alien.bmp");
     SDL_Log("OK");
 }
 
@@ -120,8 +123,6 @@ void loadBackground(ManageGame *manager, int flag){
 
 
     manager->s_renderer = SDL_CreateRenderer(manager->s_window, -1, SDL_RENDERER_TARGETTEXTURE);
-
-
 
 
     SDL_Rect dest = { 0, 0, 640, 480};
@@ -154,13 +155,13 @@ void loadBackground(ManageGame *manager, int flag){
     SDL_Delay(1000);
 //    cleanRessources(manager.s_window, manager.s_renderer, manager.s_texture);
 
+
     SDL_RendererInfo infoRenderer;
     SDL_GetRendererInfo(manager->s_renderer, &infoRenderer);
 
     if (infoRenderer.flags & SDL_RENDERER_ACCELERATED)
     {
         SDL_Log("Le rendu est gérer par la carte mère...");
-
     }
     if (infoRenderer.flags & SDL_RENDERER_SOFTWARE)
     {
@@ -175,21 +176,19 @@ void loadBackground(ManageGame *manager, int flag){
     fprintf(stdout,"Window bG %p \n", manager->s_window);
 
 }
-void loadPicture(ManageGame manager, int type, int flag){
+void loadPicture(ManageGame *manager, int type, int flag){
 
 
     if (type == Background)
-        loadBackground(&manager, flag);
+        loadBackground(manager, flag);
     if (type == Spaceship)
-        loadSpaceship(&manager, flag);
+        loadSpaceship(manager, flag);
     if (type == Alien)
         loadAlien(manager, flag);
 }
 
 
-
 ManageGame initSDL(ManageGame manager){
-
 
     manager.s_window = NULL;
     manager.s_surface = NULL;
@@ -212,7 +211,7 @@ ManageGame initSDL(ManageGame manager){
 
 
 
-ManageGame loopGame(ManageGame manager){                            //Boucle de jeu
+ManageGame loopGame(ManageGame *manager){                            //Boucle de jeu
 
     SDL_Event events;
     enum bool isOpen = { true };
@@ -227,30 +226,25 @@ ManageGame loopGame(ManageGame manager){                            //Boucle de 
             }
         }
     }
-    return manager;
-
+    return *manager;
 }
 
 
-
-ManageGame manageGame(ManageGame manager){            //déclaration de fonction manageGame (qui sert de constructeur pour la struct ManageGame, aka rassembler les fonctions d'initialisations ex: initSDL.
+ManageGame manageGame(ManageGame *manager){            //déclaration de fonction manageGame (qui sert de constructeur pour la struct ManageGame, aka rassembler les fonctions d'initialisations ex: initSDL.
     //Fonction quoi DOIT être appellé juste après chaque nouvelle instanciation, on est pas en C++.
 
 
 
-
-    manager = initSDL(manager);
+    initSDL(*manager);
 
     printf("hello world \n");
-//    loadPicture(manager, Background, MINIMIZE_BACKGROUND);
-    fprintf(stdout,"Window %p \n", manager);
-    fprintf(stdout,"Window bG %p \n", manager.s_window);
-//    loadPicture(manager, Spaceship, spawnSpaceship);
-    loadBackground(&manager,MINIMIZE_BACKGROUND);
-    loadSpaceship(&manager,spawnSpaceship);
+    loadPicture(manager, Background, MINIMIZE_BACKGROUND);
+    loadPicture(manager, Spaceship, spawnSpaceship);
+    fprintf(stdout,"Level %p \n", manager->s_window);
+    loadSpaceship(manager,spawnSpaceship);
 //    loadPicture(manager, Alien, setupAlienSpaceship);
 
-    return manager;
+    return *manager;
 }
 
 
