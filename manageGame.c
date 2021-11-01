@@ -51,6 +51,31 @@ void checkSDLTools(ManageGame manager, int tool){
     }
 }
 
+
+void displayInfo(ManageGame *manager){
+
+    SDL_RendererInfo infoRenderer;
+    SDL_GetRendererInfo(manager->s_renderer, &infoRenderer);
+
+    if (infoRenderer.flags & SDL_RENDERER_ACCELERATED)
+    {
+        SDL_Log("Le rendu est gérer par la carte mère...");
+    }
+    if (infoRenderer.flags & SDL_RENDERER_SOFTWARE)
+    {
+        SDL_Log("Le rendu est gérer par la carte graphique...");
+    }
+
+    if (infoRenderer.flags & SDL_RENDERER_TARGETTEXTURE)
+    {
+        SDL_Log("Le rendu est autoriser sur des texture...");
+    }
+
+    fprintf(stdout,"Window bG %p \n", manager->s_window);
+
+}
+
+
 void loadSpaceship(ManageGame *manager, int pictureFlag){
 
     if (manager->s_window == NULL) SDL_Log("NULL + %d", pictureFlag);
@@ -155,26 +180,7 @@ void loadBackground(ManageGame *manager, int flag){
     SDL_Delay(1000);
 //    cleanRessources(manager.s_window, manager.s_renderer, manager.s_texture);
 
-
-    SDL_RendererInfo infoRenderer;
-    SDL_GetRendererInfo(manager->s_renderer, &infoRenderer);
-
-    if (infoRenderer.flags & SDL_RENDERER_ACCELERATED)
-    {
-        SDL_Log("Le rendu est gérer par la carte mère...");
-    }
-    if (infoRenderer.flags & SDL_RENDERER_SOFTWARE)
-    {
-        SDL_Log("Le rendu est gérer par la carte graphique...");
-    }
-
-    if (infoRenderer.flags & SDL_RENDERER_TARGETTEXTURE)
-    {
-        SDL_Log("Le rendu est autoriser sur des texture...");
-    }
-
-    fprintf(stdout,"Window bG %p \n", manager->s_window);
-
+    displayInfo(manager);
 }
 void loadPicture(ManageGame *manager, int type, int flag){
 
@@ -239,9 +245,9 @@ ManageGame manageGame(ManageGame *manager){            //déclaration de fonctio
 
     printf("hello world \n");
     loadPicture(manager, Background, MINIMIZE_BACKGROUND);
-    loadPicture(manager, Spaceship, spawnSpaceship);
+//    loadPicture(manager, Spaceship, spawnSpaceship);
     fprintf(stdout,"Level %p \n", manager->s_window);
-    loadSpaceship(manager,spawnSpaceship);
+//    loadSpaceship(manager,spawnSpaceship);
 //    loadPicture(manager, Alien, setupAlienSpaceship);
 
     return *manager;
