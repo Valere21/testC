@@ -83,7 +83,7 @@ void loadSpaceship(ManageGame *manager, int pictureFlag){
     SDL_Log("Window %p", manager->s_window);
     checkSDLTools(*manager, WINDOW_TOOL_SDL);
 
-    SDL_Rect dest = { 0, 0, 640, 480};
+    SDL_Rect dest = { 0,   0, 640, 480};
 
     manager->s_surface = SDL_LoadBMP("spaceship.bmp");
     checkSDLTools(*manager, SURFACE_TOOL_SDL);
