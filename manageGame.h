@@ -8,18 +8,19 @@ typedef struct MANAGEGAME ManageGame;
 
 enum pictureType {
     Background,
-    Spaceship,
+    Ship,
     Alien
 };
 
-enum flagPicture {
+    enum flagPicture {
 
-    FULL_BACKGROUND,
-    MINIMIZE_BACKGROUND,
-    setupAlienSpaceship,
-    spawnSpaceship,
-    respawnSpaceship,
-};
+        FULL_BACKGROUND,
+        MINIMIZE_BACKGROUND,
+        RELOAD_BACKGROUND,
+        setupAlienSpaceship,
+        spawnSpaceship,
+        respawnSpaceship,
+        };
 
 enum toolSDL{
     WINDOW_TOOL_SDL,
@@ -49,7 +50,8 @@ void loadPicture(ManageGame *manager, int type, int flag);
 void loadAlien(ManageGame *manager, int type);
 void loadSpaceship(ManageGame *manager, int type);
 void loadBackground(ManageGame *manager, int type);
-
+void erasePicture(ManageGame*, SDL_Rect*);
+void reloadScreen(ManageGame*, SDL_Rect *itemToMove);
 
 struct MANAGEGAME{
 
@@ -62,13 +64,16 @@ struct MANAGEGAME{
     SDL_Texture *s_textAlien;
 
 
-    ManageGame (*manageGame)(ManageGame);       //référencement du prototype de pointeur de fonction (depuis le .h), vers la déclaration de la fonction (vers le .c)
+    ManageGame (*manageGame)(ManageGame*);       //référencement du prototype de pointeur de fonction (depuis le .h), vers la déclaration de la fonction (vers le .c)
     ManageGame (*loopGame)();
 
     void (*loadPicture)(ManageGame*, int, int);
     void (*loadAlien)(ManageGame*, int);
     void (*loadSpaceship)(ManageGame*, int);
     void (*loadBackground)(ManageGame*, int);
+    void (*erasePicture)(ManageGame*, SDL_Rect*);
+    void (*reloadScreen)(ManageGame*, SDL_Rect*);
+
 };
 
 

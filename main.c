@@ -7,6 +7,7 @@
 
 typedef struct MAP Map;
 typedef struct MANAGEGAME ManageGame;
+typedef struct VAISSEAU Vaisseau;
 
 struct MAP{
     int sizeMapXY[2];
@@ -80,18 +81,24 @@ int main(int argc, char** argv)
     char **b = argv;
     *b = 0;
 
+    Spaceship spaceship;
+
+    spaceship.manageSpaceship = &manageSpaceship;
+    spaceship.generateList = &generateList;
+    spaceship.disposeAlienShip = &disposeAlienShip;
 
     ManageGame manager;                             //nouvelle structure ManageGame
 
-    manager.manageGame = &manageGame; //référencement du prototype de pointeur de fonction (depuis le .h), vers la déclaration de la fonction (vers le .c)
-    manager.loopGame = &loopGame;
+    manager.manageGame = &manageGame; //référencement du prototype de pointeur de fonction (depuis le .h), vers la déclaration de la fonction (vers le .c)    manager.loopGame = &loopGame;
     manager.loadPicture = &loadPicture;
     manager.loadAlien = &loadAlien;
     manager.loadSpaceship = &loadSpaceship;
     manager.loadBackground = &loadBackground;
+    manager.erasePicture = &erasePicture;
+    manager.reloadScreen = &reloadScreen;
 
-    manager = manager.manageGame(manager);                    //initialisation de la nouvelle structure
-
+    manager = manager.manageGame(&manager);                    //initialisation de la nouvelle structure
+    spaceship = spaceship.manageSpaceship(&spaceship);
 
     getInput();
 
