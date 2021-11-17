@@ -9,6 +9,8 @@ typedef struct SPACESHIP Spaceship;
 Spaceship manageSpaceship(Spaceship *managerSpaceship);
 
 void generateList(Spaceship*);
+void add(Spaceship *list);
+
 void disposeAlienShip(Spaceship*);
 
 
