@@ -214,15 +214,25 @@ ManageGame initSDL(ManageGame manager){
 
 void generateList(ManageGame *manager){
 
-    //    managerSpaceship->listSpaceship = NULL;
-    manager->listAlienSpaceship = malloc(sizeof (Spaceship));
-
     SDL_Log("create list");
+//    manager->listAlienSpaceship = NULL;
+//    manager->listAlienSpaceship = malloc (sizeof (Spaceship));
+//    for (int i = 0; i < 20; i++){
+//        Spaceship *newShip = NULL;
+//        newShip = (Spaceship*) malloc(sizeof (Spaceship));
+//        manager->listAlienSpaceship[i] = newShip;
+//        SDL_Log("size %p", &newShip);
+//    }
+
+    int     **pointInt = NULL;
+    pointInt = (int **)malloc(sizeof(int));
     for (int i = 0; i < 20; i++){
-        Spaceship *newShip; {};
-        newShip = malloc(sizeof (Spaceship));
-        manager->listAlienSpaceship[i] = *newShip;
+        int *a;
+        a = (int *)malloc(sizeof(int));
+        pointInt[i] = a;
     }
+
+
 }
 
 
@@ -230,7 +240,7 @@ void generateList(ManageGame *manager){
 
 
 
-    // GESTION DU JEU
+// GESTION DU JEU
 
 void update(ManageGame *manager){
     {
@@ -307,7 +317,7 @@ ManageGame manageGame(ManageGame *manager){            //déclaration de fonctio
 
 
 
-    // GESTION DE LA LISTE CHAINEE
+// GESTION DE LA LISTE CHAINEE
 
 void add(ManageGame *manager){
 
@@ -320,7 +330,7 @@ int size(ManageGame *manager){
         SDL_Log("While %p", &manager->listAlienSpaceship[index]);
         index++;
     }
-return index;
+    return index;
 }
 
 enum bool isEmpty(ManageGame *manager){

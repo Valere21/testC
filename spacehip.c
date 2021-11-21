@@ -60,25 +60,11 @@ void moveLeft(ManageGame *manager){
 void moveRight(ManageGame* manager){
     SDL_Log("Right");
 
-
     manager->s_surface_ship = SDL_LoadBMP("spaceship.bmp");
-
-    //        SDL_DestroyRenderer(manager->s_renderer);
-
-    //  manager->checkSDLTools(*manager, SURFACE_TOOL_SDL);
-
-    //    SDL_Texture *alien_texture = SDL_CreateTextureFromSurface(manager->s_renderer, manager->s_surface);
-
     manager->s_textShip = SDL_CreateTextureFromSurface(manager->s_renderer, manager->s_surface_ship);
-
     SDL_QueryTexture(manager->s_textShip , NULL, NULL, &manager->ship->width, &manager->ship->height);
     manager->ship->width = manager->ship->width/4;
     manager->ship->height = manager->ship->height/4;
-
-    SDL_Log("pos y ship %d", manager->ship->posY);
-    SDL_Log("adr ship %p", &manager->ship);
-
-
 
     SDL_Rect dest = { manager->ship->posX, manager->ship->posY, manager->ship->width, manager->ship->height};
     SDL_RenderCopy(manager->s_renderer, manager->s_textShip , NULL, &dest);
@@ -94,7 +80,6 @@ void moveRight(ManageGame* manager){
         SDL_RenderCopy(manager->s_renderer, manager->s_textShip , NULL, &dest);
         SDL_RenderPresent(manager->s_renderer);
         SDL_DestroyTexture(manager->s_textShip );
-//        checkSDLTools(*manager, WINDOW_TOOL_SDL);
 
         SDL_DestroyTexture(manager->s_textShip);
         SDL_DestroyTexture(manager->s_textbg);

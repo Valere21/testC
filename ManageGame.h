@@ -100,7 +100,7 @@ struct MANAGEGAME{
 
 
 //    ManageInfo *managerInfo;
-    Spaceship *listAlienSpaceship;
+    Spaceship **listAlienSpaceship;
     Spaceship *ship;
 };
 

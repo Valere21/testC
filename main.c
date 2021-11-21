@@ -36,7 +36,7 @@ int main(int argc, char** argv)
 
     manager = manager.manageGame(&manager);                    //initialisation de la nouvelle structure
     manager.ship = manageSpaceship(&manager, &ship);
-//    manager.generateList(&manager);
+    manager.generateList(&manager);
     manager.update(&manager);
 
     SDL_Quit();
