@@ -22,8 +22,9 @@ int main(int argc, char** argv)
     manager.update = &update;
 
     manager.add = &add;
-    manager.delete = &delete;
+//    manager.removeAt = &removeAt;
     manager.isEmpty = &isEmpty;
+    manager.size = &size;
 
 
     Spaceship ship;
@@ -35,6 +36,7 @@ int main(int argc, char** argv)
 
     manager = manager.manageGame(&manager);                    //initialisation de la nouvelle structure
     manager.ship = manageSpaceship(&manager, &ship);
+//    manager.generateList(&manager);
     manager.update(&manager);
 
     SDL_Quit();

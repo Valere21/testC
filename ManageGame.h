@@ -53,12 +53,12 @@ void loadSpaceship(ManageGame *manager, int type);
 void loadBackground(ManageGame *manager, int type);
 void erasePicture(ManageGame*, SDL_Rect*);
 void reloadScreen(ManageGame*, SDL_Rect *itemToMove);
-void update(ManageGame *manager);
 
+void update(ManageGame *manager);
 
 int size(ManageGame *manager);
 void add(ManageGame *manager);
-void delete(ManageGame *manager, int index);
+void removeAt(ManageGame *manager, int index);
 void generateList(ManageGame *manager);
 enum bool isEmpty(ManageGame *manager);
 
@@ -80,10 +80,10 @@ struct MANAGEGAME{
     void (*update)(ManageGame*);
 
     int  (*size)(ManageGame*);
-    void (*add)(/*Spaceship **/);
-    void (*delete)(Spaceship*, int);
+    void (*add)(ManageGame*);
+    void (*removeAt)(ManageGame*, int);
     void (*generateList)(ManageGame*);
-    enum bool (*isEmpty)(Spaceship *);
+    enum bool (*isEmpty)(ManageGame*);
 
     // attribut
 

@@ -227,6 +227,9 @@ void generateList(ManageGame *manager){
 
 
 
+
+
+
     // GESTION DU JEU
 
 void update(ManageGame *manager){
@@ -311,24 +314,25 @@ void add(ManageGame *manager){
 
 }
 
-void delete(ManageGame *manager){
-
+int size(ManageGame *manager){
+    int index = 0;
+    while(index < 50){
+        SDL_Log("While %p", &manager->listAlienSpaceship[index]);
+        index++;
+    }
+return index;
 }
 
+enum bool isEmpty(ManageGame *manager){
+    enum bool flag = true;
+    if (manager->size(manager) == 0)
+        flag = false;
+    return flag;
+}
 
+//void removeAt(ManageGame *manager){
 
-
-
-
-
-
-
-
-
-
-
-
-
+//}
 
 
 

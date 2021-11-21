@@ -17,6 +17,8 @@ void moveLeft(ManageGame *manager){
 
     SDL_Log("Left");
 
+    SDL_Log("SIZE %d", manager->size(manager));
+    SDL_Log("EMPTY %d", manager->isEmpty(manager));
 
     manager->s_surface_ship = SDL_LoadBMP("spaceship.bmp");
     SDL_DestroyTexture(manager->s_textShip);
@@ -37,7 +39,7 @@ void moveLeft(ManageGame *manager){
     SDL_RenderCopy(manager->s_renderer, manager->s_textShip , NULL, &dest);
     SDL_RenderPresent(manager->s_renderer);
 
-    for (int i = 0; i < 20; i++){
+    for (int i = 0; i < 2; i++){
 
         dest.x -= 10;
         manager->ship->posX -= 10;
@@ -47,7 +49,7 @@ void moveLeft(ManageGame *manager){
         SDL_RenderCopy(manager->s_renderer, manager->s_textShip , NULL, &dest);
         SDL_RenderPresent(manager->s_renderer);
         SDL_DestroyTexture(manager->s_textShip );
-        checkSDLTools(*manager, WINDOW_TOOL_SDL);
+//        checkSDLTools(*manager, WINDOW_TOOL_SDL);
 
         SDL_DestroyTexture(manager->s_textShip);
         SDL_DestroyTexture(manager->s_textbg);
@@ -82,7 +84,7 @@ void moveRight(ManageGame* manager){
     SDL_RenderCopy(manager->s_renderer, manager->s_textShip , NULL, &dest);
     SDL_RenderPresent(manager->s_renderer);
 
-    for (int i = 0; i < 20; i++){
+    for (int i = 0; i < 2; i++){
 
         dest.x += 10;
         manager->ship->posX += 10;
@@ -92,7 +94,7 @@ void moveRight(ManageGame* manager){
         SDL_RenderCopy(manager->s_renderer, manager->s_textShip , NULL, &dest);
         SDL_RenderPresent(manager->s_renderer);
         SDL_DestroyTexture(manager->s_textShip );
-        checkSDLTools(*manager, WINDOW_TOOL_SDL);
+//        checkSDLTools(*manager, WINDOW_TOOL_SDL);
 
         SDL_DestroyTexture(manager->s_textShip);
         SDL_DestroyTexture(manager->s_textbg);
