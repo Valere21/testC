@@ -55,7 +55,13 @@ void erasePicture(ManageGame*, SDL_Rect*);
 void reloadScreen(ManageGame*, SDL_Rect *itemToMove);
 void update(ManageGame *manager);
 
+
+int size(ManageGame *manager);
+void add(ManageGame *manager);
+void delete(ManageGame *manager, int index);
 void generateList(ManageGame *manager);
+enum bool isEmpty(ManageGame *manager);
+
 
 
 struct MANAGEGAME{
@@ -72,7 +78,12 @@ struct MANAGEGAME{
     void (*erasePicture)(ManageGame*, SDL_Rect*);
     void (*reloadScreen)(ManageGame*, SDL_Rect*);
     void (*update)(ManageGame*);
+
+    int  (*size)(ManageGame*);
+    void (*add)(/*Spaceship **/);
+    void (*delete)(Spaceship*, int);
     void (*generateList)(ManageGame*);
+    enum bool (*isEmpty)(Spaceship *);
 
     // attribut
 

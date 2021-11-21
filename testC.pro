@@ -7,7 +7,7 @@ SOURCES += \
         main.c \
     manageGame.c \
     manageInfo.c \
-    spaceship.c
+    spacehip.c
 
 
 INCLUDEPATH += C:\QtProject\testC\SDL2-2.0.16\x86_64-w64-mingw32\include\SDL2
@@ -15,7 +15,7 @@ INCLUDEPATH += C:\QtProject\testC\SDL2-2.0.16\x86_64-w64-mingw32\include\SDL2
      CXXFLAGS = -std=c++11
 
 DISTFILES += \
-    alien.bmp \
+    alien.png \
     bg.bmp \
     spaceship.bmp
 

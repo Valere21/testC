@@ -10,15 +10,6 @@ typedef struct VAISSEAU Vaisseau;
 
 int main(int argc, char** argv)
 {
-    int a =  argc;
-    a = 0;
-
-    char **b = argv;
-    *b = 0;
-    const int value = 5;
-//    Spaceship spaceship;
-
-
     ManageGame manager;                             //nouvelle structure ManageGame
     manager.generateList = &generateList;
     manager.manageGame = &manageGame; //référencement du prototype de pointeur de fonction (depuis le .h), vers la déclaration de la fonction (vers le .c)    manager.loopGame = &loopGame;
@@ -29,6 +20,10 @@ int main(int argc, char** argv)
     manager.erasePicture = &erasePicture;
     manager.reloadScreen = &reloadScreen;
     manager.update = &update;
+
+    manager.add = &add;
+    manager.delete = &delete;
+    manager.isEmpty = &isEmpty;
 
 
     Spaceship ship;

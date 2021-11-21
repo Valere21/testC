@@ -9,19 +9,19 @@ typedef struct MANAGEGAME ManageGame;
 
 Spaceship *manageSpaceship(ManageGame *manager, Spaceship *managerSpaceship);
 
-void add(Spaceship *list);
-void disposeAlienShip(Spaceship*);
 
+void shoot(Spaceship*);
 void moveLeft(ManageGame*);
 void moveRight(ManageGame*);
-void shoot(Spaceship*);
+void disposeAlienShip(Spaceship*);
 
 struct SPACESHIP{
 
     // fonctions
 
     Spaceship *(*manageSpaceship)(ManageGame *, Spaceship*);       //référencement du prototype de pointeur de fonction (depuis le .h), vers la déclaration de la fonction (vers le .c)
-//    void (*generateList)(Spaceship*);
+
+
     void (*disposeAlienShip)(Spaceship*);
 
     void (*moveLeft)(ManageGame*);
@@ -41,6 +41,7 @@ struct SPACESHIP{
 
     SDL_Surface *s_spaceship;
     SDL_Surface *s_alienship;
+
 
 
 };
