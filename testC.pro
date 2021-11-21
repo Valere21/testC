@@ -6,6 +6,7 @@ CONFIG -= qt
 SOURCES += \
         main.c \
     manageGame.c \
+    manageInfo.c \
     spaceship.c
 
 
@@ -19,5 +20,6 @@ DISTFILES += \
     spaceship.bmp
 
 HEADERS += \
-    Spaceship.h \
-    manageGame.h
+    ManageGame.h \
+    ManageInfo.h \
+    Spaceship.h

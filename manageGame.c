@@ -1,9 +1,7 @@
 #include <stdio.h>
-#include "manageGame.h"
-
+#include "ManageGame.h"
 
 typedef struct MANAGEGAME ManageGame;
-
 
 void cleanRessources(SDL_Window *w, SDL_Renderer *r, SDL_Texture *t){
 
@@ -21,22 +19,23 @@ void checkSDLTools(ManageGame manager, int tool){
     switch (tool) {
     case WINDOW_TOOL_SDL:{
         if (manager.s_window == NULL){
-            SDL_Log("ERREUR > %s\n", SDL_GetError());
+            SDL_Log("ERREUR WINDOW > %s\n", SDL_GetError());
             cleanRessources(manager.s_window, NULL, NULL);
+            free(manager.s_surface);
         }
         break;
     }
 
     case SURFACE_TOOL_SDL:{
         if (manager.s_surface == NULL){
-            SDL_Log("ERREUR > %s\n", SDL_GetError());
+            SDL_Log("ERREUR SURFACE > %s\n", SDL_GetError());
             cleanRessources(manager.s_window, manager.s_renderer, NULL);
         }
         break;
     }
     case TEXTURE_TOOL_SDL:{
-        if (manager.s_texture == NULL){
-            SDL_Log("ERREUR > %s\n", SDL_GetError());
+        if (manager.s_textbg == NULL){
+            SDL_Log("ERREUR TEXTURE > %s\n", SDL_GetError());
             cleanRessources(manager.s_window, manager.s_renderer, NULL);
         }
         break;
@@ -68,15 +67,12 @@ void displayInfo(ManageGame *manager){
 }
 void reloadScreen(ManageGame* manager, SDL_Rect *itemToMove){
 
-
-
     manager->s_surface = SDL_LoadBMP("bg.bmp");
-    checkSDLTools(*manager, SURFACE_TOOL_SDL);
-    checkSDLTools(*manager, TEXTURE_TOOL_SDL);
-    manager->s_texture = SDL_CreateTextureFromSurface(manager->s_renderer, manager->s_surface);
-    SDL_RenderCopy(manager->s_renderer, manager->s_texture, NULL, NULL);
-    SDL_RenderPresent(manager->s_renderer);
+    checkSDLTools(*manager, WINDOW_TOOL_SDL);
 
+    manager->s_textbg = SDL_CreateTextureFromSurface(manager->s_renderer, manager->s_surface);
+    SDL_RenderCopy(manager->s_renderer, manager->s_textbg, NULL, NULL);
+    SDL_RenderPresent(manager->s_renderer);
 }
 
 void erasePicture(ManageGame *manager, SDL_Rect *rect){
@@ -90,12 +86,12 @@ void erasePicture(ManageGame *manager, SDL_Rect *rect){
     SDL_QueryTexture(manager->s_textShip, NULL, NULL, &largeur, &longueur);
     largeur = largeur/4;
     longueur = longueur/4;
-//    SDL_Rect dest = { 640/2, 480/2, largeur, longueur};
+    //    SDL_Rect dest = { 640/2, 480/2, largeur, longueur};
     SDL_Rect dest = { rect->x, rect->y, rect->w, rect->h};
     SDL_RenderCopy(manager->s_renderer, manager->s_textShip, NULL, &dest);
     SDL_RenderPresent(manager->s_renderer);
 
-    SDL_Delay(1000);
+    //    SDL_Delay(500);
 }
 
 
@@ -104,6 +100,7 @@ void loadAlien(ManageGame *manager, int pictureFlag){
     SDL_Log("OK");
 
     manager->s_surface = SDL_LoadBMP("alien.bmp");
+
     manager->s_textShip = SDL_CreateTextureFromSurface(manager->s_renderer, manager->s_surface);
     int largeur;
     int longueur;
@@ -118,32 +115,42 @@ void loadAlien(ManageGame *manager, int pictureFlag){
 }
 
 void loadSpaceship(ManageGame *manager, int pictureFlag){
+SDL_Log("ship %p", &manager->ship);
 
+manager->ship->moveLeft(manager);
 
-    SDL_Surface *alien = SDL_LoadBMP("spaceship.bmp");
-    SDL_Texture *alien_texture = SDL_CreateTextureFromSurface(manager->s_renderer, alien);
-    int largeur;
-    int longueur;
-    SDL_QueryTexture(alien_texture, NULL, NULL, &largeur, &longueur);
-    largeur = largeur/4;
-    longueur = longueur/4;
-    SDL_Rect dest = { 150, 150, largeur, longueur};
-    SDL_RenderCopy(manager->s_renderer, alien_texture, NULL, &dest);
-    SDL_RenderPresent(manager->s_renderer);
+////    SDL_Surface *alien = SDL_LoadBMP("spaceship.bmp");
+//    manager->s_surface_ship = SDL_LoadBMP("spaceship.bmp");
+//    checkSDLTools(*manager, SURFACE_TOOL_SDL);
 
-    for (int i = 0; i < 25; i++){
+////    SDL_Texture *alien_texture = SDL_CreateTextureFromSurface(manager->s_renderer, manager->s_surface);
+//    manager->s_textShip = SDL_CreateTextureFromSurface(manager->s_renderer, manager->s_surface_ship);
 
-        dest.x += 10;
-//        erasePicture(manager,&dest);
-        reloadScreen(manager,&dest);
-        //        SDL_Surface *alien = SDL_LoadBMP("alien.bmp");
-        SDL_Texture *alien_texture = SDL_CreateTextureFromSurface(manager->s_renderer, alien);
-        SDL_QueryTexture(alien_texture, NULL, NULL, &largeur, &longueur);
-        SDL_RenderCopy(manager->s_renderer, alien_texture, NULL, &dest);
-        SDL_RenderPresent(manager->s_renderer);
-        //        SDL_DestroyTexture(alien_texture);
-        //        SDL_FreeSurface(alien);
-    }
+//    int largeur;
+//    int longueur;
+//    SDL_QueryTexture(manager->s_textShip , NULL, NULL, &largeur, &longueur);
+//    largeur = largeur/4;
+//    longueur = longueur/4;
+////    SDL_Rect dest = { 150, 150, largeur, longueur};
+//    SDL_Rect dest = { manager->ship->posX, manager->ship->posY, largeur, longueur};
+//    SDL_RenderCopy(manager->s_renderer, manager->s_textShip , NULL, &dest);
+//    SDL_RenderPresent(manager->s_renderer);
+
+//    for (int i = 0; i < 25; i++){
+
+//        dest.x += 10;
+//        //        erasePicture(manager,&dest);
+//        reloadScreen(manager,&dest);
+//        //        SDL_Surface *alien = SDL_LoadBMP("alien.bmp");
+//        manager->s_textShip  = SDL_CreateTextureFromSurface(manager->s_renderer, manager->s_surface_ship);
+//        SDL_QueryTexture(manager->s_textShip , NULL, NULL, &largeur, &longueur);
+//        SDL_RenderCopy(manager->s_renderer, manager->s_textShip , NULL, &dest);
+//        SDL_RenderPresent(manager->s_renderer);
+//                SDL_DestroyTexture(manager->s_textShip );
+//                checkSDLTools(*manager, WINDOW_TOOL_SDL);
+////                checkSDLTools(*manager, SURFACE_TOOL_SDL);
+////                checkSDLTools(*manager, TEXTURE_TOOL_SDL);
+//    }
 
 }
 
@@ -172,29 +179,29 @@ void loadBackground(ManageGame *manager, int flag){
     checkSDLTools(*manager, SURFACE_TOOL_SDL);
 
 
-    manager->s_texture = SDL_CreateTextureFromSurface(manager->s_renderer, manager->s_surface);
+    manager->s_textbg = SDL_CreateTextureFromSurface(manager->s_renderer, manager->s_surface);
     SDL_FreeSurface(manager->s_surface);
 
     checkSDLTools(*manager, TEXTURE_TOOL_SDL);
 
 
-    if (SDL_QueryTexture(manager->s_texture, NULL, NULL, &dest.w, &dest.h) != 0){
+    if (SDL_QueryTexture(manager->s_textbg, NULL, NULL, &dest.w, &dest.h) != 0){
         SDL_Log("ERREUR > %s \n", SDL_GetError());
-        cleanRessources(manager->s_window, manager->s_renderer, manager->s_texture);
+        cleanRessources(manager->s_window, manager->s_renderer, manager->s_textbg);
     }
 
     //    checkSDLTools(manager, RENDERER_TOOL_SDL);
 
-    if (SDL_RenderCopy(manager->s_renderer, manager->s_texture, NULL, NULL) != 0){
+    if (SDL_RenderCopy(manager->s_renderer, manager->s_textbg, NULL, NULL) != 0){
         SDL_Log("ERREUR > %s \n", SDL_GetError());
-        cleanRessources(manager->s_window, manager->s_renderer, manager->s_texture);
+        cleanRessources(manager->s_window, manager->s_renderer, manager->s_textbg);
     }
 
 
     SDL_RenderPresent(manager->s_renderer);
 
-    SDL_Delay(1000);
-    //    cleanRessources(manager.s_window, manager.s_renderer, manager.s_texture);
+    //    SDL_Delay(1000);
+    //    cleanRessources(manager.s_window, manager.s_renderer, manager.s_textbg);
 
     displayInfo(manager);
 }
@@ -216,7 +223,7 @@ ManageGame initSDL(ManageGame manager){
     manager.s_surface = NULL;
     manager.s_renderer = NULL;
 
-    manager.s_texture = NULL;
+    manager.s_textbg = NULL;
     manager.s_textShip = NULL;
     manager.s_textAlien = NULL;
 
@@ -251,18 +258,73 @@ ManageGame loopGame(ManageGame *manager){                            //Boucle de
     return *manager;
 }
 
+void generateList(ManageGame *manager){
+
+    //    managerSpaceship->listSpaceship = NULL;
+    manager->listAlienSpaceship = malloc(sizeof (Spaceship));
+
+    SDL_Log("create list");
+    for (int i = 0; i < 20; i++){
+        Spaceship *newShip; {};
+        newShip = malloc(sizeof (Spaceship));
+        manager->listAlienSpaceship[i] = *newShip;
+        SDL_Log("%", &manager->listAlienSpaceship[i]);
+    }
+}
+
+void update(ManageGame *manager){
+    {
+        SDL_Log("Update");
+        SDL_Delay(1000);
+        SDL_Event *events = NULL;
+        SDL_Scancode *scanner = NULL;
+        scanner = malloc(sizeof (SDL_Scancode));
+        events = malloc(sizeof (SDL_Event));
+        SDL_bool run = SDL_TRUE;
+
+
+
+        while (run && events != NULL) {
+            while (SDL_PollEvent(events) && events){
+//            switch(events->type){
+                switch(events->key.keysym.sym){
+                case SDL_WINDOWEVENT:
+                    if (events->window.event == SDL_WINDOWEVENT_CLOSE)
+                        run = SDL_FALSE;
+                    break;
+//                case SDL_SCANCODE_LEFT:{
+                case SDLK_LEFT:{
+                    SDL_Log("Left");
+                    manager->ship->moveLeft(manager);
+                    break;
+                }
+                case SDLK_RIGHT:{
+                    SDL_Log("Right");
+                    manager->ship->moveRight(manager);
+                    break;
+                }
+                }
+            }
+        }
+    }
+}
 
 ManageGame manageGame(ManageGame *manager){            //déclaration de fonction manageGame (qui sert de constructeur pour la struct ManageGame, aka rassembler les fonctions d'initialisations ex: initSDL.
     //Fonction quoi DOIT être appellé juste après chaque nouvelle instanciation, on est pas en C++.
 
     initSDL(*manager);
+    manager->ship = NULL;
+    manager->ship = malloc(sizeof (Spaceship));
+    manager->ship->posX = 640/2;
+    manager->ship->posY = 480*0.8;
+
+
 
     printf("hello world \n");
     loadPicture(manager, Background, MINIMIZE_BACKGROUND);
-    //    loadPicture(manager, Spaceship, spawnSpaceship);
     fprintf(stdout,"Window %p \n", manager->s_window);
-    loadSpaceship(manager,spawnSpaceship);
-//    loadPicture(manager, Alien, setupAlienSpaceship);
+//    loadSpaceship(manager,spawnSpaceship);
+
 
     return *manager;
 }
@@ -283,20 +345,20 @@ ManageGame manageGame(ManageGame *manager){            //déclaration de fonctio
 //    manager->s_surface = SDL_LoadBMP("spaceship.bmp");
 //    checkSDLTools(*manager, SURFACE_TOOL_SDL);
 
-//    manager->s_texture = SDL_CreateTextureFromSurface(manager->s_renderer, manager->s_surface);
+//    manager->s_textbg = SDL_CreateTextureFromSurface(manager->s_renderer, manager->s_surface);
 //    SDL_FreeSurface(manager->s_surface);
 
 //    checkSDLTools(*manager, TEXTURE_TOOL_SDL);
 
 
-//    if (SDL_QueryTexture(manager->s_texture, NULL, NULL, &dest.w, &dest.h) != 0){
+//    if (SDL_QueryTexture(manager->s_textbg, NULL, NULL, &dest.w, &dest.h) != 0){
 //        SDL_Log("ERREUR > %s \n", SDL_GetError());
-//        cleanRessources(manager->s_window, manager->s_renderer, manager->s_texture);
+//        cleanRessources(manager->s_window, manager->s_renderer, manager->s_textbg);
 //    }
 
-//    if (SDL_RenderCopy(manager->s_renderer, manager->s_texture, NULL, NULL) != 0){
+//    if (SDL_RenderCopy(manager->s_renderer, manager->s_textbg, NULL, NULL) != 0){
 //        SDL_Log("ERREUR > %s \n", SDL_GetError());
-//        cleanRessources(manager->s_window, manager->s_renderer, manager->s_texture);
+//        cleanRessources(manager->s_window, manager->s_renderer, manager->s_textbg);
 //    }
 
 
@@ -312,13 +374,11 @@ ManageGame manageGame(ManageGame *manager){            //déclaration de fonctio
 //    h = malloc(sizeof (int));
 //    *h = 200;
 
-//    SDL_QueryTexture(manager->s_texture, NULL, NULL, w, h);
-//    SDL_RenderCopy(manager->s_renderer, manager->s_texture, &dest, NULL);
+//    SDL_QueryTexture(manager->s_textbg, NULL, NULL, w, h);
+//    SDL_RenderCopy(manager->s_renderer, manager->s_textbg, &dest, NULL);
 //    SDL_RenderPresent(manager->s_renderer);
 
 //}
-
-
 
 
 //Icone
@@ -391,6 +451,4 @@ ManageGame manageGame(ManageGame *manager){            //déclaration de fonctio
 //    SDL_SetRenderDrawColor(manager.s_renderer, 150, 255, 0, 100);
 //    SDL_RenderFillRect(manager.s_renderer, &rectangleResult);
 //    SDL_RenderPresent(manager.s_renderer); // On mets a jour notre fenêtre
-
-
 
