@@ -247,9 +247,10 @@ void update(ManageGame *manager){
             while (SDL_PollEvent(events)){
                 switch(events->type){
                 case SDL_WINDOWEVENT:
-                    if (events->window.event == SDL_WINDOWEVENT_CLOSE)
+                    if (events->window.event == SDL_WINDOWEVENT_CLOSE){
                         run = SDL_FALSE;
-                    break;
+                        break;
+                    }
                 }
                 switch(events->key.keysym.sym){
                 case SDLK_LEFT:{
@@ -260,6 +261,10 @@ void update(ManageGame *manager){
                 case SDLK_RIGHT:{
                     SDL_Log("Right");
                     manager->ship->moveRight(manager);
+                    break;
+                }
+                case SDLK_ESCAPE:{
+                    run = SDL_FALSE;
                     break;
                 }
                 }
