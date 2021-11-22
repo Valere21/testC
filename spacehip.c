@@ -17,10 +17,10 @@ void moveLeft(ManageGame *manager){
 
     SDL_Log("Left");
 
-    SDL_Log("SIZE %d", manager->size(manager));
-    SDL_Log("EMPTY %d", manager->isEmpty(manager));
+//    SDL_Log("Ship alien %p", manager->at(manager, 15));
+//    SDL_Log("Ship alien %p", manager->at(manager, 25));
 
-    manager->s_surface_ship = SDL_LoadBMP("spaceship.bmp");
+            manager->s_surface_ship = SDL_LoadBMP("spaceship.bmp");
     SDL_DestroyTexture(manager->s_textShip);
     SDL_DestroyTexture(manager->s_textbg);
 

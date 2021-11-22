@@ -215,29 +215,18 @@ ManageGame initSDL(ManageGame manager){
 void generateList(ManageGame *manager){
 
     SDL_Log("create list");
-//    manager->listAlienSpaceship = NULL;
-//    manager->listAlienSpaceship = malloc (sizeof (Spaceship));
-//    for (int i = 0; i < 20; i++){
-//        Spaceship *newShip = NULL;
-//        newShip = (Spaceship*) malloc(sizeof (Spaceship));
-//        manager->listAlienSpaceship[i] = newShip;
-//        SDL_Log("size %p", &newShip);
-//    }
-
-    int     **pointInt = NULL;
-    pointInt = (int **)malloc(sizeof(int));
+    manager->listAlienSpaceship = NULL;
+    manager->listAlienSpaceship = malloc (sizeof (Spaceship));
     for (int i = 0; i < 20; i++){
-        int *a;
-        a = (int *)malloc(sizeof(int));
-        pointInt[i] = a;
+        Spaceship *newShip = NULL;
+        newShip = (Spaceship*) malloc(sizeof (Spaceship));
+        manager->listAlienSpaceship[i] = newShip;
+        SDL_Log("creation liste %p", &newShip);
     }
-
-
+    SDL_Log("size %d",manager->size(manager));
+    if (manager->isEmpty(manager) == true) SDL_Log("est vide");
+    else SDL_Log("Est pleine");
 }
-
-
-
-
 
 
 // GESTION DU JEU
@@ -247,8 +236,8 @@ void update(ManageGame *manager){
         SDL_Log("Update");
         SDL_Delay(1000);
         SDL_Event *events = NULL;
-        SDL_Scancode *scanner = NULL;
-        scanner = malloc(sizeof (SDL_Scancode));
+//        SDL_Scancode *scanner = NULL;
+//        scanner = malloc(sizeof (SDL_Scancode));
         events = malloc(sizeof (SDL_Event));
         SDL_bool run = SDL_TRUE;
 
@@ -282,34 +271,16 @@ void update(ManageGame *manager){
 }
 
 
-ManageGame loopGame(ManageGame *manager){                            //Boucle de jeu
-
-    SDL_Event events;
-    enum bool isOpen = { true };
-    while (isOpen)
-    {
-        while (SDL_PollEvent(&events))      //Boucle d'événements
-        {
-            switch( events.type )
-            {
-            case SDL_QUIT:isOpen = false;   //Quit event
-                break;
-            }
-        }
-    }
-    return *manager;
-}
-
-
 ManageGame manageGame(ManageGame *manager){            //déclaration de fonction manageGame (qui sert de constructeur pour la struct ManageGame, aka rassembler les fonctions d'initialisations ex: initSDL.
     //Fonction quoi DOIT être appellé juste après chaque nouvelle instanciation, on est pas en C++.
 
     initSDL(*manager);
     printf("hello world \n");
-    loadPicture(manager, Background, MINIMIZE_BACKGROUND);
+    loadPicture(manager, Background, FULL_BACKGROUND);
     fprintf(stdout,"Window %p \n", manager->s_window);
     //    loadSpaceship(manager,spawnSpaceship);
 
+    manager->generateList(manager);
 
     return *manager;
 }
@@ -326,23 +297,25 @@ void add(ManageGame *manager){
 
 int size(ManageGame *manager){
     int index = 0;
-    while(index < 50){
-        SDL_Log("While %p", &manager->listAlienSpaceship[index]);
+    while(manager->listAlienSpaceship[index] != NULL)
         index++;
-    }
     return index;
 }
 
 enum bool isEmpty(ManageGame *manager){
-    enum bool flag = true;
+    enum bool flag = false;
     if (manager->size(manager) == 0)
-        flag = false;
+        flag = true;
     return flag;
 }
 
-//void removeAt(ManageGame *manager){
-
-//}
+Spaceship* at(ManageGame *manager, int index){
+    Spaceship *ship = NULL;
+    if (manager->size(manager) >= index){
+        ship = manager->listAlienSpaceship[index];
+    }
+    return ship;
+}
 
 
 

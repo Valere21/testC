@@ -43,25 +43,27 @@ enum bool {
 };
 
 
-
+//Gère le jeu
 ManageGame manageGame(ManageGame *manager);
 ManageGame loopGame(ManageGame *manager);
 
+//Gère la SDL et l'interface
 void loadPicture(ManageGame *manager, int type, int flag);
 void loadAlien(ManageGame *manager, int type);
 void loadSpaceship(ManageGame *manager, int type);
 void loadBackground(ManageGame *manager, int type);
 void erasePicture(ManageGame*, SDL_Rect*);
 void reloadScreen(ManageGame*, SDL_Rect *itemToMove);
-
 void update(ManageGame *manager);
 
+//Gère la liste chainée contenant les vaisseaux aliens
 int size(ManageGame *manager);
 void add(ManageGame *manager);
 void removeAt(ManageGame *manager, int index);
 void generateList(ManageGame *manager);
 enum bool isEmpty(ManageGame *manager);
 
+Spaceship* at(ManageGame *manager, int);
 
 
 struct MANAGEGAME{
@@ -81,6 +83,7 @@ struct MANAGEGAME{
 
     int  (*size)(ManageGame*);
     void (*add)(ManageGame*);
+    Spaceship* (*at)(ManageGame*, int);
     void (*removeAt)(ManageGame*, int);
     void (*generateList)(ManageGame*);
     enum bool (*isEmpty)(ManageGame*);

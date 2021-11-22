@@ -11,6 +11,7 @@ typedef struct VAISSEAU Vaisseau;
 int main(int argc, char** argv)
 {
     ManageGame manager;                             //nouvelle structure ManageGame
+    Spaceship ship;
     manager.generateList = &generateList;
     manager.manageGame = &manageGame; //référencement du prototype de pointeur de fonction (depuis le .h), vers la déclaration de la fonction (vers le .c)    manager.loopGame = &loopGame;
     manager.loadPicture = &loadPicture;
@@ -22,12 +23,11 @@ int main(int argc, char** argv)
     manager.update = &update;
 
     manager.add = &add;
-//    manager.removeAt = &removeAt;
+    manager.at = &at;
     manager.isEmpty = &isEmpty;
     manager.size = &size;
 
 
-    Spaceship ship;
     ship.manageSpaceship = &manageSpaceship;
     ship.disposeAlienShip = &disposeAlienShip;
     ship.shoot = &shoot;
@@ -36,7 +36,6 @@ int main(int argc, char** argv)
 
     manager = manager.manageGame(&manager);                    //initialisation de la nouvelle structure
     manager.ship = manageSpaceship(&manager, &ship);
-    manager.generateList(&manager);
     manager.update(&manager);
 
     SDL_Quit();
