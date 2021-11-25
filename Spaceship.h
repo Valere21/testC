@@ -15,6 +15,20 @@ void moveLeft(ManageGame*);
 void moveRight(ManageGame*);
 void disposeAlienShip(Spaceship*);
 
+//Gère la liste chainée contenant les vaisseaux aliens
+
+Spaceship *append(Spaceship* ship);
+Spaceship *prepend(Spaceship* listAlien);
+Spaceship* at(ManageGame *manager, Spaceship **ship, int);
+
+void displayList(Spaceship listAlien);
+void removeAt(Spaceship* ship, int index);
+
+int size(Spaceship *ship);
+enum bool isEmpty(Spaceship* ship);
+
+
+
 struct SPACESHIP{
 
     // fonctions
@@ -27,6 +41,21 @@ struct SPACESHIP{
     void (*moveLeft)(ManageGame*);
     void (*moveRight)(ManageGame*);
     void (*shoot)(Spaceship*);
+
+
+    int  (*size)(Spaceship*);
+
+
+    enum bool (*isEmpty)(Spaceship*);
+    Spaceship (*append)(Spaceship*);
+    Spaceship (*prepend)(Spaceship*);
+    Spaceship (*at)(Spaceship**, int);
+
+    void (*displayList)(Spaceship);
+    void (*removeAt)(Spaceship*, int);
+
+
+
 
 
     // attribut
@@ -42,6 +71,7 @@ struct SPACESHIP{
     SDL_Surface *s_spaceship;
     SDL_Surface *s_alienship;
 
+    Spaceship *nextShip;
 
 
 };

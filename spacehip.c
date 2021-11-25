@@ -17,10 +17,10 @@ void moveLeft(ManageGame *manager){
 
     SDL_Log("Left");
 
-//    SDL_Log("Ship alien %p", manager->at(manager, 15));
-//    SDL_Log("Ship alien %p", manager->at(manager, 25));
+    //    SDL_Log("Ship alien %p", manager->at(manager, 15));
+    //    SDL_Log("Ship alien %p", manager->at(manager, 25));
 
-            manager->s_surface_ship = SDL_LoadBMP("spaceship.bmp");
+    manager->s_surface_ship = SDL_LoadBMP("spaceship.bmp");
     SDL_DestroyTexture(manager->s_textShip);
     SDL_DestroyTexture(manager->s_textbg);
 
@@ -49,7 +49,7 @@ void moveLeft(ManageGame *manager){
         SDL_RenderCopy(manager->s_renderer, manager->s_textShip , NULL, &dest);
         SDL_RenderPresent(manager->s_renderer);
         SDL_DestroyTexture(manager->s_textShip );
-//        checkSDLTools(*manager, WINDOW_TOOL_SDL);
+        //        checkSDLTools(*manager, WINDOW_TOOL_SDL);
 
         SDL_DestroyTexture(manager->s_textShip);
         SDL_DestroyTexture(manager->s_textbg);
@@ -86,17 +86,96 @@ void moveRight(ManageGame* manager){
     }
 }
 
-void shoot(Spaceship* ship){
+void shoot(Spaceship* listAlien){
 
 }
 
+// GESTION DE LA LISTE CHAINEE
 
 
+int size(Spaceship *ship){
+    SDL_Log(("func size"));
+
+    int index = 0;
+    while(&ship[index] != NULL)
+    {
+        SDL_Log(("loop"));
+        index++;
+    }
+    SDL_Log(("out"));
+    return index;
+}
+
+enum bool isEmpty(Spaceship* listAlien){
+    enum bool flag = false;
+    if (listAlien){
+        SDL_Log(("func isEmpty"));
+
+        if (size(listAlien) == 0)
+            flag = true;
+    }
+    else    {
+        SDL_Log(("Not exisiting"));
+    }
+    return flag;
+}
+
+Spaceship* append(Spaceship* listAlien){
+
+    SDL_Log(("Append"));
+
+    Spaceship *newShip = malloc (sizeof (Spaceship));
+    newShip->nextShip = listAlien;
+
+    return listAlien;
+}
 
 
+Spaceship *prepend(Spaceship *listAlien)
+{
+    Spaceship *newShip = malloc (sizeof (Spaceship));
+    newShip->nextShip = NULL;
+
+    if(listAlien == NULL)
+    {
+        /* Si la liste est videé il suffit de renvoyer l'élément créé */
+        return newShip;
+    }
+    else
+    {
+        /* Sinon, on parcourt la liste à l'aide d'un pointeur temporaire et on
+        indique que le dernier élément de la liste est relié au nouvel élément */
+        Spaceship* temp = listAlien;
+        while(temp->nextShip != NULL)
+        {
+            temp = temp->nextShip;
+        }
+        temp->nextShip = newShip;
+        return listAlien;
+    }
+}
 
 
+void displayList(Spaceship listAlien)
+{
+    Spaceship *tmp = &listAlien;
+    /* Tant que l'on n'est pas au bout de la liste */
+    while(tmp != NULL)
+    {
+        /* On affiche */
+        SDL_Log("%p", tmp);
+        /* On avance d'une case */
+        tmp = tmp->nextShip;
+    }
+}
 
+Spaceship* at(ManageGame *manager, Spaceship** ship, int index){
+    Spaceship *newShip = NULL;
+    if (size(*ship) >= index){
+        newShip = &manager->listAlienSpaceship[index];
+    }
+    return newShip;
+}
 
 
 

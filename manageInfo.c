@@ -3,7 +3,6 @@
 
 //typedef struct MANAGEINFO ManageInfo;
 
-
 //ManageInfo *manageInfo(ManageInfo *managerInfo){            //déclaration de fonction manageGame (qui sert de constructeur pour la struct ManageGame, aka rassembler les fonctions d'initialisations ex: initSDL.
 //    if (managerInfo == NULL) managerInfo = malloc(sizeof (Spaceship));
 ////    generateList(managerSpaceship);
@@ -52,6 +51,8 @@
 
 //void displayInfo(ManageGame *manager){
 
+
+//    SDL_Log("Helllllllll");
 //    SDL_RendererInfo infoRenderer;
 //    SDL_GetRendererInfo(manager->s_renderer, &infoRenderer);
 

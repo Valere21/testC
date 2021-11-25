@@ -1,7 +1,7 @@
 #ifndef MANAGEGAME_H
 #define MANAGEGAME_H
 #include <Spaceship.h>
-//#include <ManageInfo.h>
+#include "ManageInfo.h"
 #include "SDL.h"
 #include <stdio.h>
 
@@ -56,15 +56,7 @@ void erasePicture(ManageGame*, SDL_Rect*);
 void reloadScreen(ManageGame*, SDL_Rect *itemToMove);
 void update(ManageGame *manager);
 
-//Gère la liste chainée contenant les vaisseaux aliens
-int size(ManageGame *manager);
-void add(ManageGame *manager);
-void removeAt(ManageGame *manager, int index);
 void generateList(ManageGame *manager);
-enum bool isEmpty(ManageGame *manager);
-
-Spaceship* at(ManageGame *manager, int);
-
 
 struct MANAGEGAME{
 
@@ -81,16 +73,16 @@ struct MANAGEGAME{
     void (*reloadScreen)(ManageGame*, SDL_Rect*);
     void (*update)(ManageGame*);
 
-    int  (*size)(ManageGame*);
-    void (*add)(ManageGame*);
-    Spaceship* (*at)(ManageGame*, int);
-    void (*removeAt)(ManageGame*, int);
-    void (*generateList)(ManageGame*);
-    enum bool (*isEmpty)(ManageGame*);
 
     // attribut
-
     int level;
+    int s_time_previous;
+    int s_time_actual;
+
+    void (*generateList)(ManageGame*);
+
+    ManageInfo *s_managerInfo;
+
     SDL_Window *s_window;
     SDL_Surface *s_surface;
     SDL_Surface *s_surface_ship;
@@ -101,10 +93,11 @@ struct MANAGEGAME{
     SDL_Texture *s_textShip;
     SDL_Texture **s_textAlien;
 
-
-//    ManageInfo *managerInfo;
-    Spaceship **listAlienSpaceship;
     Spaceship *ship;
+    Spaceship *listAlienSpaceship;
+
+
+
 };
 
 
