@@ -12,7 +12,12 @@ int main(int argc, char** argv)
 {
     ManageGame manager;                             //nouvelle structure ManageGame
     Spaceship ship;
+    Spaceship listAlien;
+
     manager.manageGame = &manageGame; //référencement du prototype de pointeur de fonction (depuis le .h), vers la déclaration de la fonction (vers le .c)    manager.loopGame = &loopGame;
+
+
+
     manager.loadPicture = &loadPicture;
     manager.loadAlien = &loadAlien;
     manager.loadSpaceship = &loadSpaceship;
@@ -22,11 +27,12 @@ int main(int argc, char** argv)
     manager.update = &update;
 
     manager.generateList = &generateList;
+    manager.append = &append;
+    manager.displayList = &displayList;
 
-    ship.append = &append;
     ship.prepend = &prepend;
 
-    ship.at = &at;
+    manager.at = &at;
     ship.isEmpty = &isEmpty;
     ship.size = &size;
 
@@ -37,8 +43,11 @@ int main(int argc, char** argv)
     ship.moveLeft = &moveLeft;
     ship.moveRight = &moveRight;
 
+    listAlien = ship;
+
     manager = manager.manageGame(&manager);                    //initialisation de la nouvelle structure    
     manager.ship = manageSpaceship(&manager, &ship);
+
     manager.update(&manager);
 
     SDL_Quit();

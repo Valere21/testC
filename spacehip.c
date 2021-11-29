@@ -4,48 +4,38 @@ typedef struct SPACESHIP Spaceship;
 
 Spaceship *manageSpaceship(ManageGame *manager, Spaceship *ship){            //déclaration de fonction manageGame (qui sert de constructeur pour la struct ManageGame, aka rassembler les fonctions d'initialisations ex: initSDL.
     manager->ship = ship;
-    manager->ship->posX = 640/2;
-    manager->ship->posY = 480*0.7;
+    manager->ship->posX = SCREEN_WIDTH/2;
+    manager->ship->posY = SCREEN_HEIGHT*0.7;
     return manager->ship;
 }
 
-void disposeAlienShip(Spaceship *managerSpaceship){
+void disposeAlienShip(ManageGame *manager){
 
-}
-
-void moveLeft(ManageGame *manager){
-
-    SDL_Log("Left");
-
-    //    SDL_Log("Ship alien %p", manager->at(manager, 15));
-    //    SDL_Log("Ship alien %p", manager->at(manager, 25));
-
-    manager->s_surface_ship = SDL_LoadBMP("spaceship.bmp");
+    manager->s_surface_ship = SDL_LoadBMP("alien.bmp");
     SDL_DestroyTexture(manager->s_textShip);
     SDL_DestroyTexture(manager->s_textbg);
 
-    manager->s_textShip = SDL_CreateTextureFromSurface(manager->s_renderer, manager->s_surface_ship);
+    for(int i = 0; i < size(manager->listAlienSpaceship); i++){
+        SDL_Log("loop for");
+    }
 
-    int largeur;
-    int longueur;
-    SDL_QueryTexture(manager->s_textShip , NULL, NULL, &largeur, &longueur);
-    largeur = largeur/4;
-    longueur = longueur/4;
+    SDL_QueryTexture(manager->s_textShip , NULL, NULL, &manager->ship->height, &manager->ship->width);
 
+    manager->ship->width /= 4;
+    manager->ship->height /= 4;
 
-
-    //    SDL_Rect dest = { 150, 150, largeur, longueur};
-    SDL_Rect dest = { manager->ship->posX, manager->ship->posY, largeur, longueur};
+    //    SDL_Rect dest = { manager->ship->posX, manager->ship->posY, manager->ship->width, manager->ship->height};
+    SDL_Rect dest = { 0, manager->ship->posY, manager->ship->width, manager->ship->height};
+    SDL_Log("%d", manager->ship->posX);
     SDL_RenderCopy(manager->s_renderer, manager->s_textShip , NULL, &dest);
     SDL_RenderPresent(manager->s_renderer);
-
-    for (int i = 0; i < 2; i++){
+    for (int i = 0; i < 1; i++){
 
         dest.x -= 10;
         manager->ship->posX -= 10;
         reloadScreen(manager,&dest);
         manager->s_textShip  = SDL_CreateTextureFromSurface(manager->s_renderer, manager->s_surface_ship);
-        SDL_QueryTexture(manager->s_textShip , NULL, NULL, &largeur, &longueur);
+        SDL_QueryTexture(manager->s_textShip , NULL, NULL, &manager->ship->height, &manager->ship->width);
         SDL_RenderCopy(manager->s_renderer, manager->s_textShip , NULL, &dest);
         SDL_RenderPresent(manager->s_renderer);
         SDL_DestroyTexture(manager->s_textShip );
@@ -54,11 +44,42 @@ void moveLeft(ManageGame *manager){
         SDL_DestroyTexture(manager->s_textShip);
         SDL_DestroyTexture(manager->s_textbg);
     }
+}
 
+void moveLeft(ManageGame *manager){
+
+    manager->s_surface_ship = SDL_LoadBMP("spaceship.bmp");
+    SDL_DestroyTexture(manager->s_textShip);
+    SDL_DestroyTexture(manager->s_textbg);
+
+    manager->s_textShip = SDL_CreateTextureFromSurface(manager->s_renderer, manager->s_surface_ship);
+    SDL_QueryTexture(manager->s_textShip , NULL, NULL, &manager->ship->height, &manager->ship->width);
+
+    manager->ship->width /= 4;
+    manager->ship->height /= 4;
+
+    SDL_Rect dest = { manager->ship->posX, manager->ship->posY, manager->ship->width, manager->ship->height};
+    SDL_RenderCopy(manager->s_renderer, manager->s_textShip , NULL, &dest);
+    SDL_RenderPresent(manager->s_renderer);
+
+    for (int i = 0; i < 1; i++){
+
+        dest.x -= 10;
+        manager->ship->posX -= 10;
+        reloadScreen(manager,&dest);
+        manager->s_textShip  = SDL_CreateTextureFromSurface(manager->s_renderer, manager->s_surface_ship);
+        SDL_QueryTexture(manager->s_textShip , NULL, NULL, &manager->ship->height, &manager->ship->width);
+        SDL_RenderCopy(manager->s_renderer, manager->s_textShip , NULL, &dest);
+        SDL_RenderPresent(manager->s_renderer);
+        SDL_DestroyTexture(manager->s_textShip );
+        //        checkSDLTools(*manager, WINDOW_TOOL_SDL);
+
+        SDL_DestroyTexture(manager->s_textShip);
+        SDL_DestroyTexture(manager->s_textbg);
+    }
 }
 
 void moveRight(ManageGame* manager){
-    SDL_Log("Right");
 
     manager->s_surface_ship = SDL_LoadBMP("spaceship.bmp");
     manager->s_textShip = SDL_CreateTextureFromSurface(manager->s_renderer, manager->s_surface_ship);
@@ -70,17 +91,17 @@ void moveRight(ManageGame* manager){
     SDL_RenderCopy(manager->s_renderer, manager->s_textShip , NULL, &dest);
     SDL_RenderPresent(manager->s_renderer);
 
-    for (int i = 0; i < 2; i++){
-
+    for (int i = 0; i < 1; i++){
         dest.x += 10;
         manager->ship->posX += 10;
         reloadScreen(manager,&dest);
         manager->s_textShip  = SDL_CreateTextureFromSurface(manager->s_renderer, manager->s_surface_ship);
         SDL_QueryTexture(manager->s_textShip , NULL, NULL, &manager->ship->width, &manager->ship->height);
         SDL_RenderCopy(manager->s_renderer, manager->s_textShip , NULL, &dest);
-        SDL_RenderPresent(manager->s_renderer);
+        if (manager->s_renderer){
+            SDL_RenderPresent(manager->s_renderer);
+        }
         SDL_DestroyTexture(manager->s_textShip );
-
         SDL_DestroyTexture(manager->s_textShip);
         SDL_DestroyTexture(manager->s_textbg);
     }
@@ -99,6 +120,7 @@ int size(Spaceship *ship){
     int index = 0;
     while(&ship[index] != NULL)
     {
+        SDL_Log(" adresse %p  index %d", &ship, index);
         SDL_Log(("loop"));
         index++;
     }
@@ -107,6 +129,9 @@ int size(Spaceship *ship){
 }
 
 enum bool isEmpty(Spaceship* listAlien){
+
+    SDL_Log("Func isEmpty");
+
     enum bool flag = false;
     if (listAlien){
         SDL_Log(("func isEmpty"));
@@ -120,18 +145,9 @@ enum bool isEmpty(Spaceship* listAlien){
     return flag;
 }
 
-Spaceship* append(Spaceship* listAlien){
-
-    SDL_Log(("Append"));
-
-    Spaceship *newShip = malloc (sizeof (Spaceship));
-    newShip->nextShip = listAlien;
-
-    return listAlien;
-}
 
 
-Spaceship *prepend(Spaceship *listAlien)
+Spaceship *prepend(Spaceship *listAlien, ManageGame *list)
 {
     Spaceship *newShip = malloc (sizeof (Spaceship));
     newShip->nextShip = NULL;
@@ -155,27 +171,6 @@ Spaceship *prepend(Spaceship *listAlien)
     }
 }
 
-
-void displayList(Spaceship listAlien)
-{
-    Spaceship *tmp = &listAlien;
-    /* Tant que l'on n'est pas au bout de la liste */
-    while(tmp != NULL)
-    {
-        /* On affiche */
-        SDL_Log("%p", tmp);
-        /* On avance d'une case */
-        tmp = tmp->nextShip;
-    }
-}
-
-Spaceship* at(ManageGame *manager, Spaceship** ship, int index){
-    Spaceship *newShip = NULL;
-    if (size(*ship) >= index){
-        newShip = &manager->listAlienSpaceship[index];
-    }
-    return newShip;
-}
 
 
 

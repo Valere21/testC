@@ -2,6 +2,7 @@
 #include "ManageGame.h"
 
 typedef struct MANAGEGAME ManageGame;
+typedef struct MANAGEINFO ManageInfo;
 
 void cleanRessources(SDL_Window *w, SDL_Renderer *r, SDL_Texture *t){
 
@@ -91,7 +92,7 @@ void erasePicture(ManageGame *manager, SDL_Rect *rect){
     SDL_QueryTexture(manager->s_textShip, NULL, NULL, &largeur, &longueur);
     largeur = largeur/4;
     longueur = longueur/4;
-    //    SDL_Rect dest = { 640/2, 480/2, largeur, longueur};
+    //    SDL_Rect dest = { SCREEN_WIDTH/2, SCREEN_HEIGHT/2, largeur, longueur};
     SDL_Rect dest = { rect->x, rect->y, rect->w, rect->h};
     SDL_RenderCopy(manager->s_renderer, manager->s_textShip, NULL, &dest);
     SDL_RenderPresent(manager->s_renderer);
@@ -100,22 +101,17 @@ void erasePicture(ManageGame *manager, SDL_Rect *rect){
 }
 
 
-void loadAlien(ManageGame *manager, int pictureFlag){
+void loadAlien(ManageGame *manager, int flag){
 
-    SDL_Log("OK");
+    manager->s_surface_ship = SDL_LoadBMP("spaceship.bmp");
+    manager->s_textShip = SDL_CreateTextureFromSurface(manager->s_renderer, manager->s_surface_ship);
+    SDL_QueryTexture(manager->s_textShip , NULL, NULL, &manager->listAlienSpaceship->width, &manager->listAlienSpaceship->height);
+    manager->listAlienSpaceship->width = manager->listAlienSpaceship->width/4;
+    manager->listAlienSpaceship->height = manager->listAlienSpaceship->height/4;
 
-    manager->s_surface = SDL_LoadBMP("alien.bmp");
-
-    manager->s_textShip = SDL_CreateTextureFromSurface(manager->s_renderer, manager->s_surface);
-    int largeur;
-    int longueur;
-    SDL_QueryTexture(manager->s_textShip, NULL, NULL, &largeur, &longueur);
-    largeur = largeur/4;
-    longueur = longueur/4;
-    SDL_Rect dest = { 640/2, 480/2, largeur, longueur};
-    SDL_RenderCopy(manager->s_renderer, manager->s_textShip, NULL, &dest);
+    SDL_Rect dest = { manager->listAlienSpaceship->posX, manager->listAlienSpaceship->posY, manager->listAlienSpaceship->width, manager->listAlienSpaceship->height};
+    SDL_RenderCopy(manager->s_renderer, manager->s_textShip , NULL, &dest);
     SDL_RenderPresent(manager->s_renderer);
-
 
 }
 
@@ -133,10 +129,10 @@ void loadBackground(ManageGame *manager, int flag){
     fprintf(stdout,"Level %d \n", manager->level);
 
     if (flag == FULL_BACKGROUND)
-        manager->s_window = SDL_CreateWindow("Appli test", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, 640, 480, SDL_WINDOW_FULLSCREEN_DESKTOP);
+        manager->s_window = SDL_CreateWindow("Appli test", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_FULLSCREEN_DESKTOP);
 
     else if (flag == MINIMIZE_BACKGROUND)
-        manager->s_window = SDL_CreateWindow("Appli test", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, 640, 480, SDL_WINDOW_SHOWN);
+        manager->s_window = SDL_CreateWindow("Appli test", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_SHOWN);
 
 
     checkSDLTools(*manager, WINDOW_TOOL_SDL);
@@ -145,7 +141,7 @@ void loadBackground(ManageGame *manager, int flag){
     manager->s_renderer = SDL_CreateRenderer(manager->s_window, -1, SDL_RENDERER_TARGETTEXTURE);
 
 
-    SDL_Rect dest = { 0, 0, 640, 480};
+    SDL_Rect dest = { 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT};
 
     manager->s_surface = SDL_LoadBMP("bg.bmp");
     checkSDLTools(*manager, SURFACE_TOOL_SDL);
@@ -199,58 +195,83 @@ ManageGame initSDL(ManageGame *manager){
     manager->s_textShip = NULL;
     manager->s_textAlien = NULL;
 
-
     SDL_Init(SDL_INIT_VIDEO);
     if (SDL_Init(SDL_INIT_VIDEO) != 0 )
     {
         fprintf(stdout,"Échec de l'initialisation de la SDL (%s)\n",SDL_GetError());
         manager->s_managerInfo->cleanRessources(NULL,NULL,NULL);
     }
+    return *manager;
+}
 
+ManageGame manageGame(ManageGame *manager){            //déclaration de fonction manageGame (qui sert de constructeur pour la struct ManageGame, aka rassembler les fonctions d'initialisations ex: initSDL.
+    //Fonction quoi DOIT être appellé juste après chaque nouvelle instanciation, on est pas en C++.
+
+    initSDL(manager);
+    printf("hello world \n");
+    loadPicture(manager, Background, MINIMIZE_BACKGROUND);
+
+    manager->listAlienSpaceship = manager->generateList(manager);
     return *manager;
 }
 
 
-void generateList(ManageGame *manager){
+Spaceship *generateList(ManageGame *manager){
 
-    SDL_Log("create list");
-
-    Spaceship newList;
-
+    manager->listAlienSpaceship = NULL;
     for (int i = 0; i < 20; i++){
-       newList = manager->listAlienSpaceship->append(manager->listAlienSpaceship);
-       // ship déclaré dans le main ?
+        manager->listAlienSpaceship = manager->append(manager->listAlienSpaceship);
     }
-    //manager->listAlienSpaceship = &newList;
+    SDL_Log("addr 1 %p", manager->listAlienSpaceship);
+    return manager->listAlienSpaceship;
 }
 
 
-//void generateList(ManageGame *manager){
+Spaceship* append(Spaceship* listAlienSpaceship){
 
-//    SDL_Log("create list");
-//    for (int i = 0; i < 20; i++){
-//        Spaceship *newShip = NULL;
-//        newShip = (Spaceship*) malloc(sizeof (Spaceship));
-//        manager->listAlienSpaceship[i] = *newShip;
-//        SDL_Log("creation liste %p", &newShip);
-//    }
-//    if (manager->listAlienSpaceship->isEmpty(manager->listAlienSpaceship) == true) SDL_Log("est vide");
-//    else SDL_Log("Est pleine");
-//}
+    Spaceship *newShip;
+    newShip = malloc (sizeof (Spaceship));
+    if (newShip){
+        newShip->posX = SCREEN_WIDTH/2;
+        newShip->posY = SCREEN_HEIGHT*0.2;
+        newShip->Alife = true;
+        newShip->width = SCREEN_WIDTH/4;
+        newShip->height = SCREEN_HEIGHT/4;
+        newShip->nextShip = listAlienSpaceship;
+    }
+    return newShip;
+}
+
+void displayList(Spaceship *listAlien)
+{
+    while(listAlien){
+        SDL_Log("height %d", listAlien->height);
+        SDL_Log("width %d", listAlien->width);
+        listAlien = listAlien->nextShip;
+    }
+}
+
+Spaceship* at(ManageGame *manager, int index){
+    Spaceship *newShip = NULL;
+
+    return newShip;
+}
+
 
 
 // GESTION DU JEU
 
 void update(ManageGame *manager){
     {
-        SDL_Log("Update");
         SDL_Delay(1000);
-        SDL_Event *events = NULL;
         //        SDL_Scancode *scanner = NULL;
         //        scanner = malloc(sizeof (SDL_Scancode));
-        events = malloc(sizeof (SDL_Event));
+
         SDL_bool run = SDL_TRUE;
+
         while (run) {
+            SDL_Event event /*= malloc(sizeof (SDL_Event))*/;
+
 
             manager->s_time_previous = SDL_GetTicks();
             if (manager->s_time_actual - manager->s_time_previous > 30) /* Si 30 ms se sont écoulées */
@@ -258,32 +279,29 @@ void update(ManageGame *manager){
                 //                manager->ship->moveLeft(manager); /* On bouge Zozor */
             }
 
-            while (SDL_PollEvent(events)){
-                switch(events->type){
+
+            while (SDL_PollEvent(&event)){
+                switch(event.type){
                 case SDL_WINDOWEVENT:
-                    if (events->window.event == SDL_WINDOWEVENT_CLOSE){
+                    if (event.window.event == SDL_WINDOWEVENT_CLOSE){
                         run = SDL_FALSE;
+
+                        cleanRessources(manager->s_window, manager->s_renderer, manager->s_textbg);
+                        cleanRessources(NULL, NULL, manager->s_textShip);
                         break;
                     }
                 }
-                switch(events->key.keysym.sym){
-                case SDLK_f:{
-                    SDL_Log("ENTER");
-                    if (manager->listAlienSpaceship->isEmpty(manager->listAlienSpaceship)){
-                        SDL_Log("isEmpty");
-                        manager->generateList(manager);
-                    }
-                    else
-                        SDL_Log("Not");
+                switch(event.key.keysym.sym){
+                case SDLK_SPACE:{
+                    SDL_Log("addr 2 %p", manager->listAlienSpaceship);
+                    displayList(manager->listAlienSpaceship);
                     break;
                 }
                 case SDLK_LEFT:{
-                    SDL_Log("Left");
                     manager->ship->moveLeft(manager);
                     break;
                 }
                 case SDLK_RIGHT:{
-                    SDL_Log("Right");
                     manager->ship->moveRight(manager);
                     break;
                 }
@@ -301,20 +319,6 @@ void update(ManageGame *manager){
 }
 
 
-ManageGame manageGame(ManageGame *manager){            //déclaration de fonction manageGame (qui sert de constructeur pour la struct ManageGame, aka rassembler les fonctions d'initialisations ex: initSDL.
-    //Fonction quoi DOIT être appellé juste après chaque nouvelle instanciation, on est pas en C++.
-
-    initSDL(manager);
-    printf("hello world \n");
-    loadPicture(manager, Background, MINIMIZE_BACKGROUND);
-
-//    manager->listAlienSpaceship = NULL;
-//    manager->listAlienSpaceship = malloc (sizeof (Spaceship));
-
-    manager->generateList(manager);
-
-    return *manager;
-}
 
 
 
