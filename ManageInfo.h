@@ -22,4 +22,3 @@ struct MANAGEINFO {
     void (*displayInfo)(ManageGame*);
 
 };
-
