@@ -5,6 +5,10 @@
 #include "SDL.h"
 #include <stdio.h>
 
+#define SCREEN_WIDTH  640
+#define SCREEN_HEIGHT 480
+
+typedef struct MANAGEINFO ManageInfo;
 typedef struct MANAGEGAME ManageGame;
 
 enum pictureType {
@@ -44,34 +48,48 @@ enum bool {
 
 
 //Gère le jeu
+
 ManageGame manageGame(ManageGame *manager);
+
+
 ManageGame loopGame(ManageGame *manager);
 
 //Gère la SDL et l'interface
 void loadPicture(ManageGame *manager, int type, int flag);
-void loadAlien(ManageGame *manager, int type);
+void loadAlien(ManageGame *manager, int flag);
 void loadSpaceship(ManageGame *manager, int type);
 void loadBackground(ManageGame *manager, int type);
 void erasePicture(ManageGame*, SDL_Rect*);
 void reloadScreen(ManageGame*, SDL_Rect *itemToMove);
 void update(ManageGame *manager);
 
-void generateList(ManageGame *manager);
+Spaceship* generateList(ManageGame *manager);
+void displayList(Spaceship *listAlien);
+Spaceship *append(Spaceship* listAlien);
+Spaceship* at(ManageGame *manager, int index);
+
+
+
 
 struct MANAGEGAME{
 
-    // fonctions
+    // méthode
+    Spaceship (*at)(Spaceship*, int);
 
     ManageGame (*manageGame)(ManageGame*);       //rÃ©fÃ©rencement du prototype de pointeur de fonction (depuis le .h), vers la dÃ©claration de la fonction (vers le .c)
     ManageGame (*loopGame)();
 
-    void (*loadPicture)(ManageGame*, int, int);
+    void (*update)(ManageGame*);
     void (*loadAlien)(ManageGame*, int);
     void (*loadSpaceship)(ManageGame*, int);
     void (*loadBackground)(ManageGame*, int);
+    void (*loadPicture)(ManageGame*, int, int);
     void (*erasePicture)(ManageGame*, SDL_Rect*);
     void (*reloadScreen)(ManageGame*, SDL_Rect*);
-    void (*update)(ManageGame*);
+
+    Spaceship* (*generateList)(ManageGame*);
+    Spaceship* (*append)(Spaceship*);
+    void (*displayList)(Spaceship*);
 
 
     // attribut
@@ -79,7 +97,6 @@ struct MANAGEGAME{
     int s_time_previous;
     int s_time_actual;
 
-    void (*generateList)(ManageGame*);
 
     ManageInfo *s_managerInfo;
 
@@ -95,8 +112,6 @@ struct MANAGEGAME{
 
     Spaceship *ship;
     Spaceship *listAlienSpaceship;
-
-
 
 };
 
