@@ -99,8 +99,6 @@ void reloadAlienShip(ManageGame* manager){
 
     manager->s_surface = SDL_LoadBMP("alien.bmp");
     checkSDLTools(*manager, WINDOW_TOOL_SDL, Alien);
-    checkSDLTools(*manager, SURFACE_TOOL_SDL, Alien);
-
 
 
     manager->s_textAlien = SDL_CreateTextureFromSurface(manager->s_renderer, manager->s_surface);
