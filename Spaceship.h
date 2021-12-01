@@ -19,12 +19,9 @@ void disposeAlienShip(ManageGame*);
 
 //Spaceship *append(Spaceship* ship);
 
-Spaceship *prepend(Spaceship* listAlien, ManageGame *list);
 
 void removeAt(Spaceship* ship, int index);
 
-int size(Spaceship *ship);
-enum bool isEmpty(Spaceship* ship);
 
 
 
@@ -42,19 +39,15 @@ struct SPACESHIP{
     void (*shoot)(Spaceship*);
 
 
-    int  (*size)(Spaceship*);
 
 
-    enum bool (*isEmpty)(Spaceship*);
     Spaceship (*prepend)(Spaceship*);
 
     void (*removeAt)(Spaceship*, int);
 
 
-
-
-
     // attribut
+    int id;
     int posX;
     int posY;
 

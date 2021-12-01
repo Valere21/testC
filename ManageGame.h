@@ -60,21 +60,34 @@ void loadAlien(ManageGame *manager, int flag);
 void loadSpaceship(ManageGame *manager, int type);
 void loadBackground(ManageGame *manager, int type);
 void erasePicture(ManageGame*, SDL_Rect*);
-void reloadScreen(ManageGame*, SDL_Rect *itemToMove);
+
+void reloadScreen(ManageGame*);
+void reloadShip(ManageGame*);
+void reloadAlienShip(ManageGame*);
+
 void update(ManageGame *manager);
 
-Spaceship* generateList(ManageGame *manager);
-void displayList(Spaceship *listAlien);
-Spaceship *append(Spaceship* listAlien);
-Spaceship* at(ManageGame *manager, int index);
+////////// antoine //////////
 
 
+Spaceship** generateSpaceshipList(int ship_numbeer);
+Spaceship*  generateRawSpaceship(int id);
+Spaceship *at(Spaceship *first, int index);
+
+void append(Spaceship **list, Spaceship *ship);
+void applyOnList(Spaceship *first, void (*f)(Spaceship *));
+void displayList(Spaceship **list);
+
+int size (Spaceship **list);
+enum bool isEmpty (Spaceship **list);
+
+
+////////// ////////// //////////
 
 
 struct MANAGEGAME{
 
     // méthode
-    Spaceship (*at)(Spaceship*, int);
 
     ManageGame (*manageGame)(ManageGame*);       //rÃ©fÃ©rencement du prototype de pointeur de fonction (depuis le .h), vers la dÃ©claration de la fonction (vers le .c)
     ManageGame (*loopGame)();
@@ -85,11 +98,28 @@ struct MANAGEGAME{
     void (*loadBackground)(ManageGame*, int);
     void (*loadPicture)(ManageGame*, int, int);
     void (*erasePicture)(ManageGame*, SDL_Rect*);
-    void (*reloadScreen)(ManageGame*, SDL_Rect*);
 
-    Spaceship* (*generateList)(ManageGame*);
-    Spaceship* (*append)(Spaceship*);
-    void (*displayList)(Spaceship*);
+    void (*reloadScreen)(ManageGame*);
+    void (*reloadShip)(ManageGame*);
+    void (*reloadAlienShip)(ManageGame*);
+
+
+    ////////// antoine //////////
+
+
+    Spaceship** (*generateSpaceshipList)(int);
+    Spaceship*  (*generateRawSpaceship)(int);
+    Spaceship* (*at)(Spaceship*, int);
+
+    int (*size)(Spaceship**);
+    enum bool (*isEmpty)(Spaceship**);
+
+    void (*displayList)(Spaceship**);
+    void (*append)(Spaceship**, Spaceship*);
+    void (*applyOnList)(Spaceship*, void (*)(Spaceship*));
+
+    ////////// ////////// //////////
+
 
 
     // attribut
@@ -108,10 +138,10 @@ struct MANAGEGAME{
 
     SDL_Texture *s_textbg;
     SDL_Texture *s_textShip;
-    SDL_Texture **s_textAlien;
+    SDL_Texture *s_textAlien;
 
     Spaceship *ship;
-    Spaceship *listAlienSpaceship;
+    Spaceship **listAlienShip;
 
 };
 

@@ -12,29 +12,30 @@ int main(int argc, char** argv)
 {
     ManageGame manager;                             //nouvelle structure ManageGame
     Spaceship ship;
-    Spaceship listAlien;
+
+
 
     manager.manageGame = &manageGame; //référencement du prototype de pointeur de fonction (depuis le .h), vers la déclaration de la fonction (vers le .c)    manager.loopGame = &loopGame;
-
-
 
     manager.loadPicture = &loadPicture;
     manager.loadAlien = &loadAlien;
     manager.loadSpaceship = &loadSpaceship;
     manager.loadBackground = &loadBackground;
     manager.erasePicture = &erasePicture;
+    manager.reloadShip = &reloadShip;
     manager.reloadScreen = &reloadScreen;
+    manager.reloadAlienShip = &reloadAlienShip;
+
     manager.update = &update;
 
-    manager.generateList = &generateList;
-    manager.append = &append;
-    manager.displayList = &displayList;
-
-    ship.prepend = &prepend;
-
+    manager.generateSpaceshipList = &generateSpaceshipList;
+    manager.generateRawSpaceship = &generateRawSpaceship;
     manager.at = &at;
-    ship.isEmpty = &isEmpty;
-    ship.size = &size;
+    manager.append = &append;
+    manager.applyOnList = &applyOnList;
+    manager.displayList = &displayList;
+    manager.isEmpty = &isEmpty;
+//    manager.size = &size;
 
 
     ship.manageSpaceship = &manageSpaceship;
@@ -42,8 +43,6 @@ int main(int argc, char** argv)
     ship.shoot = &shoot;
     ship.moveLeft = &moveLeft;
     ship.moveRight = &moveRight;
-
-    listAlien = ship;
 
     manager = manager.manageGame(&manager);                    //initialisation de la nouvelle structure    
     manager.ship = manageSpaceship(&manager, &ship);
