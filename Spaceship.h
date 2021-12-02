@@ -5,8 +5,6 @@
 typedef struct SPACESHIP Spaceship;
 typedef struct MANAGEGAME ManageGame;
 
-
-
 Spaceship *manageSpaceship(ManageGame *manager, Spaceship *managerSpaceship);
 
 
@@ -55,7 +53,7 @@ struct SPACESHIP{
     int height;
 
     int Alife;
-    char direction;
+    int direction;
 
     SDL_Surface *s_spaceship;
     SDL_Surface *s_alienship;

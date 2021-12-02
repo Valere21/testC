@@ -35,6 +35,7 @@ int main(int argc, char** argv)
     manager.applyOnList = &applyOnList;
     manager.displayList = &displayList;
     manager.isEmpty = &isEmpty;
+    manager.reverseAlienDirection = &reverseAlienDirection;
 //    manager.size = &size;
 
 

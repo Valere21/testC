@@ -11,6 +11,11 @@
 typedef struct MANAGEINFO ManageInfo;
 typedef struct MANAGEGAME ManageGame;
 
+enum direction {
+    left = 0,
+    right = 1
+};
+
 enum pictureType {
     Background,
     Ship,
@@ -64,6 +69,7 @@ void erasePicture(ManageGame*, SDL_Rect*);
 void reloadScreen(ManageGame*);
 void reloadShip(ManageGame*);
 void reloadAlienShip(ManageGame*);
+void reverseAlienDirection(Spaceship *ship);
 
 void update(ManageGame *manager);
 
@@ -102,7 +108,7 @@ struct MANAGEGAME{
     void (*reloadScreen)(ManageGame*);
     void (*reloadShip)(ManageGame*);
     void (*reloadAlienShip)(ManageGame*);
-
+    void (*reverseAlienDirection)(Spaceship*);
 
     ////////// antoine //////////
 

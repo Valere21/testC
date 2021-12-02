@@ -19,8 +19,8 @@ void disposeAlienShip(ManageGame *manager){
 
     SDL_QueryTexture(manager->s_textShip , NULL, NULL, &manager->ship->height, &manager->ship->width);
 
-    manager->ship->width /= 4;
-    manager->ship->height /= 4;
+    manager->ship->width = 75;
+    manager->ship->height = 75;
 
     //    SDL_Rect dest = { manager->ship->posX, manager->ship->posY, manager->ship->width, manager->ship->height};
     SDL_Rect dest = { 0, manager->ship->posY, manager->ship->width, manager->ship->height};
@@ -53,8 +53,8 @@ void moveLeft(ManageGame *manager){
     manager->s_textShip = SDL_CreateTextureFromSurface(manager->s_renderer, manager->s_surface_ship);
     SDL_QueryTexture(manager->s_textShip , NULL, NULL, &manager->ship->height, &manager->ship->width);
 
-    manager->ship->width /= 4;
-    manager->ship->height /= 4;
+    manager->ship->width = 75;
+    manager->ship->height = 75;
 
     SDL_Rect dest = { manager->ship->posX, manager->ship->posY, manager->ship->width, manager->ship->height};
     SDL_RenderCopy(manager->s_renderer, manager->s_textShip , NULL, &dest);
@@ -65,6 +65,8 @@ void moveLeft(ManageGame *manager){
         dest.x -= 10;
         manager->ship->posX -= 10;
         reloadScreen(manager);
+//        reloadAlien(manager);
+
         manager->s_textShip  = SDL_CreateTextureFromSurface(manager->s_renderer, manager->s_surface_ship);
         SDL_QueryTexture(manager->s_textShip , NULL, NULL, &manager->ship->height, &manager->ship->width);
         SDL_RenderCopy(manager->s_renderer, manager->s_textShip , NULL, &dest);
@@ -79,11 +81,13 @@ void moveLeft(ManageGame *manager){
 
 void moveRight(ManageGame* manager){
 
+
+
     manager->s_surface_ship = SDL_LoadBMP("spaceship.bmp");
     manager->s_textShip = SDL_CreateTextureFromSurface(manager->s_renderer, manager->s_surface_ship);
     SDL_QueryTexture(manager->s_textShip , NULL, NULL, &manager->ship->width, &manager->ship->height);
-    manager->ship->width = manager->ship->width/4;
-    manager->ship->height = manager->ship->height/4;
+    manager->ship->width = 75;
+    manager->ship->height = 75;
 
     SDL_Rect dest = { manager->ship->posX, manager->ship->posY, manager->ship->width, manager->ship->height};
     SDL_RenderCopy(manager->s_renderer, manager->s_textShip , NULL, &dest);

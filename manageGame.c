@@ -13,6 +13,7 @@ void cleanRessources(SDL_Window *w, SDL_Renderer *r, SDL_Texture *t){
     if (w != NULL)
         SDL_DestroyWindow(w);
     SDL_Quit();
+    return;
 }
 
 void checkSDLTools(ManageGame manager, int tool, int flag){
@@ -95,21 +96,55 @@ void reloadShip(ManageGame* manager){
     SDL_RenderPresent(manager->s_renderer);
 }
 
+void reverseAlienDirection(Spaceship* ship){
+    SDL_Log("reverse 3");
+    if (!ship)
+        return;
+    else if (ship->direction == left)
+        ship->direction = right;
+    else if (ship->direction == right)
+        ship->direction = left;
+}
+
+int moveAlienPosition(ManageGame *manager, int index){
+    int addPos = 0;
+    if (at(*manager->listAlienShip, index)->posX >= 600 && at(*manager->listAlienShip, index)->direction == right){
+        SDL_Log("reverse 0");
+        applyOnList(*manager->listAlienShip,reverseAlienDirection);
+        addPos = -10;
+    }
+    else if (at(*manager->listAlienShip, index)->posX >= 20 && at(*manager->listAlienShip, index)->direction == left){
+        SDL_Log("reverse 1");
+        applyOnList(*manager->listAlienShip,reverseAlienDirection);
+        addPos = 10;
+    }
+    else if (at(*manager->listAlienShip, index)->direction == right)
+        addPos = -10;
+    else if (at(*manager->listAlienShip, index)->direction == left)
+        addPos = 10;
+
+    return addPos;
+}
+
 void reloadAlienShip(ManageGame* manager){
 
     manager->s_surface = SDL_LoadBMP("alien.bmp");
     checkSDLTools(*manager, WINDOW_TOOL_SDL, Alien);
-
-
     manager->s_textAlien = SDL_CreateTextureFromSurface(manager->s_renderer, manager->s_surface);
-
     SDL_FreeSurface(manager->s_surface);
     checkSDLTools(*manager, TEXTURE_TOOL_SDL, Alien);
 
+    for (int i = 0; i < size(manager->listAlienShip); i++){
+        SDL_Rect dest = { at(*manager->listAlienShip, i)->posX, at(*manager->listAlienShip, i)->posY, at(*manager->listAlienShip, i)->width, at(*manager->listAlienShip, 2)->height};
+        SDL_RenderCopy(manager->s_renderer, manager->s_textAlien, NULL, &dest);
+        int addPos = 0;
+        addPos = moveAlienPosition(manager,i);
 
-    SDL_Rect dest = { at(*manager->listAlienShip, 2)->posX, at(*manager->listAlienShip, 2)->posY, at(*manager->listAlienShip, 2)->width, at(*manager->listAlienShip, 2)->height};
-    SDL_RenderCopy(manager->s_renderer, manager->s_textAlien, NULL, &dest);
+        at(*manager->listAlienShip, i)->posX += addPos;
+    }
+    SDL_DestroyTexture(manager->s_textbg);
     SDL_RenderPresent(manager->s_renderer);
+    //    moveLeft(manager);
 }
 
 
@@ -117,8 +152,6 @@ void reloadScreen(ManageGame* manager){
 
     manager->s_surface = SDL_LoadBMP("bg.bmp");
     checkSDLTools(*manager, WINDOW_TOOL_SDL, Background);
-
-
     manager->s_textbg = SDL_CreateTextureFromSurface(manager->s_renderer, manager->s_surface);
 
     SDL_FreeSurface(manager->s_surface);
@@ -126,8 +159,9 @@ void reloadScreen(ManageGame* manager){
 
 
     SDL_RenderCopy(manager->s_renderer, manager->s_textbg, NULL, NULL);
+
     SDL_RenderPresent(manager->s_renderer);
-    reloadAlienShip(manager);
+    manager->reloadAlienShip(manager);
 }
 
 void erasePicture(ManageGame *manager, SDL_Rect *rect){
@@ -152,23 +186,29 @@ void erasePicture(ManageGame *manager, SDL_Rect *rect){
 
 void loadAlien(ManageGame *manager, int flag){
 
-    //    manager->s_surface_ship = SDL_LoadBMP("Spaceship.bmp");
-    //    manager->s_textShip = SDL_CreateTextureFromSurface(manager->s_renderer, manager->s_surface_ship);
-    //    SDL_QueryTexture(manager->s_textShip , NULL, NULL, &manager->listAlienSpaceship->width, &manager->listAlienSpaceship->height);
-    //    manager->listAlienSpaceship->width = manager->listAlienSpaceship->width/4;
-    //    manager->listAlienSpaceship->height = manager->listAlienSpaceship->height/4;
+    manager->s_surface = SDL_LoadBMP("alien.bmp");
+    checkSDLTools(*manager, WINDOW_TOOL_SDL, Alien);
+    manager->s_textAlien = SDL_CreateTextureFromSurface(manager->s_renderer, manager->s_surface);
+    SDL_FreeSurface(manager->s_surface);
+    checkSDLTools(*manager, TEXTURE_TOOL_SDL, Alien);
 
-    //    SDL_Rect dest = { manager->listAlienSpaceship->posX, manager->listAlienSpaceship->posY, manager->listAlienSpaceship->width, manager->listAlienSpaceship->height};
-    //    SDL_RenderCopy(manager->s_renderer, manager->s_textShip , NULL, &dest);
-    //    SDL_RenderPresent(manager->s_renderer);
+    for (int i = 0; i < size(manager->listAlienShip); i++){
 
+        SDL_Rect dest = { at(*manager->listAlienShip, i)->posX, at(*manager->listAlienShip, i)->posY, at(*manager->listAlienShip, i)->width, at(*manager->listAlienShip, 2)->height};
+        SDL_RenderCopy(manager->s_renderer, manager->s_textAlien, NULL, &dest);
+
+        SDL_Log("posX %d",at(*manager->listAlienShip, i)->posX);
+        SDL_Log("posY %d",at(*manager->listAlienShip, i)->posY);
+        SDL_Log("Width %d",at(*manager->listAlienShip, i)->width);
+        SDL_Log("Height %d",at(*manager->listAlienShip, i)->height);
+    }
+    SDL_RenderPresent(manager->s_renderer);
 }
 
 void loadSpaceship(ManageGame *manager, int pictureFlag){
     SDL_Log("ship %p", &manager->ship);
 
     manager->ship->moveLeft(manager);
-
 }
 
 void loadBackground(ManageGame *manager, int flag){
@@ -301,18 +341,19 @@ Spaceship **generateSpaceshipList(int ship_number)
     return Spaceship_list;
 }
 
+
 Spaceship *generateRawSpaceship(int id)
 {
+
     Spaceship *ship = (Spaceship*) malloc(sizeof(Spaceship));
     ship->id = id;
-    if (id == 0)
-        ship->posX = SCREEN_WIDTH * 0.2;
-    else
-        ship->posX = SCREEN_WIDTH * 0.2+(id*15);
+    ship->direction = right;
+    ship->width = 60;
+    ship->height = 60;
 
     ship->posY = SCREEN_HEIGHT*0.2;
+    ship->posX = id*75;
     ship->nextShip = NULL;
-    SDL_Log("posX %d", ship->posX);
     return ship;
 }
 
@@ -391,22 +432,25 @@ void displayList(Spaceship** listAlien){
 
 void update(ManageGame *manager){
     {
+
+        manager->s_time_actual = 0;
+        manager->s_time_previous = 0;
+
         SDL_Delay(1000);
-        //        SDL_Scancode *scanner = NULL;
-        //        scanner = malloc(sizeof (SDL_Scancode));
 
         SDL_bool run = SDL_TRUE;
 
         while (run) {
             SDL_Event event /*= malloc(sizeof (SDL_Event))*/;
 
-
-            manager->s_time_previous = SDL_GetTicks();
+            manager->s_time_actual = SDL_GetTicks();
             if (manager->s_time_actual - manager->s_time_previous > 30) /* Si 30 ms se sont écoulées */
             {
-                //                manager->ship->moveLeft(manager); /* On bouge Zozor */
+                //                SDL_Log("RUN");
+                //                reloadAlienShip(manager);
+                reloadScreen(manager);
+                manager->s_time_previous = manager->s_time_actual; /* Le temps "actuel" devient le temps "precedent" pour nos futurs calculs */
             }
-
 
             while (SDL_PollEvent(&event)){
                 switch(event.type){
@@ -421,6 +465,7 @@ void update(ManageGame *manager){
                 }
                 switch(event.key.keysym.sym){
                 case SDLK_SPACE:{
+                    loadAlien(manager, Alien);
                     break;
                 }
                 case SDLK_LEFT:{
